@@ -5,6 +5,7 @@
   "type": "module",
   "dependencies": {
     "@fastify/static": "^6.5.0",
+    "@inlivedev/inlive-js-sdk": "^0.1.0",
     "@lit-labs/ssr": "2.2.3",
     "dotenv": "^16.0.3",
     "fastify": "4.7.0",
