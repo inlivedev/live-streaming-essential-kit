@@ -4,7 +4,7 @@ import { globby } from 'globby';
 import { nodeResolve } from '@rollup/plugin-node-resolve';
 import commonjs from '@rollup/plugin-commonjs';
 import del from 'rollup-plugin-delete';
-import { serve } from 'src/scripts/reload-server.js';
+import { serve } from './src/scripts/reload-server.js';
 
 const packageJson = JSON.parse(
   readFileSync(new URL('package.json', import.meta.url))
