@@ -33,6 +33,7 @@ export class CreateStream extends LitElement {
         text-align: left;
         display: flex;
         flex-direction: column;
+        width: 21.438rem;
       }
 
       .stream-title {
@@ -44,7 +45,7 @@ export class CreateStream extends LitElement {
       }
 
       .input-field {
-        width: 20rem;
+        width: auto;
         padding: 0.563rem 0.813rem;
         background: #ffffff;
         box-shadow: 0px 0.063rem 0.125rem rgba(0, 0, 0, 0.05);
@@ -66,13 +67,13 @@ export class CreateStream extends LitElement {
       }
 
       .input-field-description {
-        width: 20rem;
+        width: auto;
         height: 6.563rem;
         padding: 0.563rem 0.813rem;
         background: #ffffff;
-        border: 1px solid #d1d5db;
         box-shadow: 0px 0.063rem 0.125rem rgba(0, 0, 0, 0.05);
-        border-radius: 6px;
+        border-radius: 0.375rem;
+        border: 1px solid #d1d5db;
       }
 
       .input-field-description:focus {
@@ -102,6 +103,8 @@ export class CreateStream extends LitElement {
       }
 
       .description-container {
+        display: flex;
+        flex-direction: column;
         margin-top: 1rem;
       }
 
@@ -110,7 +113,9 @@ export class CreateStream extends LitElement {
       }
 
       .submit-button {
-        width: 8.188rem;
+        width: 21.438rem;
+        position: absolute;
+        bottom: 2.5rem;
         padding: 0.563rem 1.063rem;
         border: none;
         background: #2563eb;
@@ -121,7 +126,7 @@ export class CreateStream extends LitElement {
         line-height: 1.25rem;
         color: #ffffff;
         cursor: pointer;
-        align-self: end;
+        align-self: center;
       }
 
       .error {
@@ -137,12 +142,14 @@ export class CreateStream extends LitElement {
       }
 
       @media (min-width: 640px) {
-        .input-field {
+        .create-form {
           width: 30rem;
         }
 
-        .input-field-description {
-          width: 30rem;
+        .submit-button {
+          position: static;
+          width: 8.188rem;
+          align-self: end;
         }
       }
     `;
