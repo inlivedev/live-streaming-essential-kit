@@ -21,8 +21,8 @@ export class CreateStream extends LitElement {
 
       .create-main-title {
         font-weight: 700;
-        font-size: 24px;
-        line-height: 32px;
+        font-size: 1.5rem;
+        line-height: 2rem;
         color: #1f2937;
         margin-top: 10rem;
         margin-bottom: 2rem;
@@ -37,18 +37,18 @@ export class CreateStream extends LitElement {
 
       .stream-title {
         font-weight: 500;
-        font-size: 14px;
-        line-height: 20px;
+        font-size: 0.875rem;
+        line-height: 1.25rem;
         color: #374151;
         margin-bottom: 0.25rem;
       }
 
       .input-field {
-        width: 320px;
-        padding: 9px 13px;
+        width: 20rem;
+        padding: 0.563rem 0.813rem;
         background: #ffffff;
-        box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.05);
-        border-radius: 6px;
+        box-shadow: 0px 0.063rem 0.125rem rgba(0, 0, 0, 0.05);
+        border-radius: 0.375rem;
       }
 
       .input-field.gray {
@@ -61,37 +61,37 @@ export class CreateStream extends LitElement {
 
       .input-field:focus {
         border: 1px solid #3b82f6;
-        box-shadow: 0px 0px 0px 2px #bfdbfe;
+        box-shadow: 0px 0px 0px 0.125rem #bfdbfe;
         outline: none;
       }
 
       .input-field-description {
-        width: 320px;
-        height: 105px;
-        padding: 9px 13px;
+        width: 20rem;
+        height: 6.563rem;
+        padding: 0.563rem 0.813rem;
         background: #ffffff;
         border: 1px solid #d1d5db;
-        box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.05);
+        box-shadow: 0px 0.063rem 0.125rem rgba(0, 0, 0, 0.05);
         border-radius: 6px;
       }
 
       .input-field-description:focus {
         border: 1px solid #3b82f6;
-        box-shadow: 0px 0px 0px 2px #bfdbfe;
+        box-shadow: 0px 0px 0px 0.125rem #bfdbfe;
         outline: none;
       }
 
       ::placeholder {
         font-weight: 400;
-        font-size: 14px;
-        line-height: 20px;
+        font-size: 0.875rem;
+        line-height: 1.25rem;
         color: rgba(107, 114, 128, 0.8);
       }
 
       .input-description-note {
         font-weight: 400;
-        font-size: 12px;
-        line-height: 16px;
+        font-size: 0.75rem;
+        line-height: 1rem;
         color: #9ca3af;
         margin-top: 0.125rem;
       }
@@ -110,15 +110,15 @@ export class CreateStream extends LitElement {
       }
 
       .submit-button {
-        width: 131px;
-        padding: 9px 17px;
+        width: 8.188rem;
+        padding: 0.563rem 1.063rem;
         border: none;
         background: #2563eb;
-        box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.05);
-        border-radius: 6px;
+        box-shadow: 0px 0.063rem 0.125rem rgba(0, 0, 0, 0.05);
+        border-radius: 0.375rem;
         font-weight: 500;
-        font-size: 14px;
-        line-height: 20px;
+        font-size: 0.875rem;
+        line-height: 1.25rem;
         color: #ffffff;
         cursor: pointer;
         align-self: end;
@@ -126,7 +126,7 @@ export class CreateStream extends LitElement {
 
       .error {
         border: 1px solid red;
-        box-shadow: 0px 0px 0px 2px red;
+        box-shadow: 0px 0px 0px 0.125rem red;
         outline: none;
       }
 
@@ -138,11 +138,11 @@ export class CreateStream extends LitElement {
 
       @media (min-width: 640px) {
         .input-field {
-          width: 480px;
+          width: 30rem;
         }
 
         .input-field-description {
-          width: 480px;
+          width: 30rem;
         }
       }
     `;
