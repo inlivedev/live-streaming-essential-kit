@@ -44,7 +44,7 @@ export class CreateStream extends LitElement {
       }
 
       .input-field {
-        width: 480px;
+        width: 320px;
         padding: 9px 13px;
         background: #ffffff;
         box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.05);
@@ -66,7 +66,7 @@ export class CreateStream extends LitElement {
       }
 
       .input-field-description {
-        width: 480px;
+        width: 320px;
         height: 105px;
         padding: 9px 13px;
         background: #ffffff;
@@ -135,6 +135,16 @@ export class CreateStream extends LitElement {
         font-weight: 500;
         margin-top: 0.25rem;
       }
+
+      @media (min-width: 640px) {
+        .input-field {
+          width: 480px;
+        }
+
+        .input-field-description {
+          width: 480px;
+        }
+      }
     `;
   }
 
@@ -149,6 +159,12 @@ export class CreateStream extends LitElement {
     this.showErrorText = false;
   }
 
+  /**
+   * Check if input has value
+   *
+   * @param {string} input
+   * @returns {any} can be text if there's input text, or just boolean show error text
+   */
   hasValue(input) {
     if (input.trim() === '') {
       // if title not input
@@ -160,6 +176,12 @@ export class CreateStream extends LitElement {
     }
   }
 
+  /**
+   * Func to create stream with create stream SDK module
+   *
+   * @param {object} inliveApp api key
+   * @param {{ name: string; description: string; }} configObject stream title & desc
+   */
   async createStream(inliveApp, configObject) {
     // from SDK
     const dataStream = await InliveStream.createStream(inliveApp, configObject);
@@ -171,12 +193,18 @@ export class CreateStream extends LitElement {
     }
   }
 
+  /**
+   * Func submit form
+   *
+   * @param {{ preventDefault: () => void; }} e event
+   */
   submit(e) {
     e.preventDefault();
     const form = this.renderRoot.querySelector('form[id="create-stream-form"]');
+
     const configObject = {
-      name: this.hasValue(form.elements['title'].value),
-      description: form.elements['description'].value || ''
+      name: form ? this.hasValue(form['title'].value) : '',
+      description: form ? form['description'].value || '' : ''
     };
 
     // trial hard-code
