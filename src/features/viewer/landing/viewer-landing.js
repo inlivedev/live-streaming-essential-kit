@@ -42,16 +42,18 @@ export class ViewerLanding extends LitElement {
   static get properties() {
     return {
       showErrorText: { type: Boolean },
-      streamData: { type: Object },
-      title: { type: String }
+      streamTitle: { type: String },
+      streamDescription: { type: String },
+      startTime: { type: String }
     };
   }
 
   constructor() {
     super();
     this.showErrorText = false;
-    this.streamData = {};
-    this.title = '';
+    this.streamTitle = '';
+    this.streamDescription = '';
+    this.startTime = '';
   }
 
   render() {
@@ -60,9 +62,12 @@ export class ViewerLanding extends LitElement {
         <!-- will change later on -->
         <div class="top-info">
           <div>LIVE</div>
-          <div class="stream-time">28 Sep 2022 - 16:00 WIB</div>
+          <div class="stream-time">${this.startTime}</div>
         </div>
-        <app-stream-info></app-stream-info>
+        <app-stream-info
+          streamTitle=${this.streamTitle}
+          streamDescription=${this.streamDescription}
+        ></app-stream-info>
         <app-join-live></app-join-live>
       </div>
     `;

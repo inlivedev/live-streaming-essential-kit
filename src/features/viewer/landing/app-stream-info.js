@@ -52,13 +52,17 @@ export class AppStreamInfo extends LitElement {
 
   static get properties() {
     return {
-      showErrorText: { type: Boolean }
+      showErrorText: { type: Boolean },
+      streamTitle: { type: String },
+      streamDescription: { type: String }
     };
   }
 
   constructor() {
     super();
     this.showErrorText = false;
+    this.streamTitle = '';
+    this.streamDescription = '';
   }
 
   render() {
@@ -68,12 +72,12 @@ export class AppStreamInfo extends LitElement {
           <div class="mock-picture"></div>
         </div>
         <div class="text-container">
-          <div class="stream-title">Membahas Jenis-Jenis Kapal</div>
-          <div class="stream-description">
-            Porttitor purus bibendum sagittis, at ut phasellus volutpat arcu
-            vestibulum faucibus sit cursus magna lacus, fames id amet facilisi
-            nulla leo, porttitor augue dui pharetra nisi, diam eu quam lorem
-          </div>
+          <div class="stream-title">${this.streamTitle}</div>
+          ${this.streamDescription !== ''
+            ? html`<div class="stream-description">
+                ${this.streamDescription}
+              </div>`
+            : null}
         </div>
       </div>
     `;
