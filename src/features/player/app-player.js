@@ -136,8 +136,6 @@ export class AppPlayer extends LitElement {
 
   render() {
     return html`
-      <p>${this.muted}</p>
-      <p>${this.autoplay}</p>
       <div class="player-container">
         <video id="inlive-player" controls playsinline></video>
       </div>
