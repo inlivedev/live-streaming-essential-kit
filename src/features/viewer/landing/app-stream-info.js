@@ -11,14 +11,8 @@ export class AppStreamInfo extends LitElement {
         font-style: normal;
       }
 
-      .mock-picture {
-        height: 12.059rem;
-        background: black;
-        border-radius: 1rem;
-      }
-
       .text-container {
-        margin-top: 2.004rem;
+        margin-top: 1rem;
       }
 
       .stream-title {
@@ -38,13 +32,13 @@ export class AppStreamInfo extends LitElement {
       }
 
       @media (min-width: 640px) {
-        .stream-description {
-          text-align: center;
+        .text-container {
+          width: 68%;
+          margin: 1rem auto 0 auto;
         }
 
-        .mock-picture {
-          width: 21.438rem;
-          margin: 0 auto;
+        .stream-description {
+          text-align: center;
         }
       }
     `;
@@ -68,9 +62,6 @@ export class AppStreamInfo extends LitElement {
   render() {
     return html`
       <div class="stream-info-container">
-        <div>
-          <div class="mock-picture"></div>
-        </div>
         <div class="text-container">
           <div class="stream-title">${this.streamTitle}</div>
           ${this.streamDescription !== ''
