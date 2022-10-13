@@ -1,8 +1,9 @@
 import { LitElement, css, html } from 'lit';
 import './app-stream-info.js';
 import './app-join-live.js';
+import './app-top-bar.js';
 
-export class ViewerLanding extends LitElement {
+export class AppViewerLanding extends LitElement {
   static get styles() {
     return css`
       * {
@@ -19,21 +20,6 @@ export class ViewerLanding extends LitElement {
         flex-direction: column;
       }
 
-      .top-info {
-        display: flex;
-        justify-content: space-between;
-        padding: 1rem 0;
-        margin-top: 3rem;
-      }
-
-      .stream-time {
-        font-weight: 600;
-        font-size: 14px;
-        line-height: 20px;
-        text-align: right;
-        color: #4b5563;
-      }
-
       @media (min-width: 640px) {
       }
     `;
@@ -44,7 +30,10 @@ export class ViewerLanding extends LitElement {
       showErrorText: { type: Boolean },
       streamTitle: { type: String },
       streamDescription: { type: String },
-      startTime: { type: String }
+      startTime: { type: String },
+      isScheduled: { type: String },
+      isEnded: { type: String },
+      isLive: { type: String }
     };
   }
 
@@ -54,16 +43,20 @@ export class ViewerLanding extends LitElement {
     this.streamTitle = '';
     this.streamDescription = '';
     this.startTime = '';
+    this.isScheduled = '';
+    this.isEnded = '';
+    this.isLive = '';
   }
 
   render() {
     return html`
       <div class="landing-container">
-        <!-- will change later on -->
-        <div class="top-info">
-          <div>LIVE</div>
-          <div class="stream-time">${this.startTime}</div>
-        </div>
+        <app-top-bar
+          startTime=${this.startTime}
+          isScheduled=${this.isScheduled}
+          isEnded=${this.isEnded}
+          isLive=${this.isLive}
+        ></app-top-bar>
         <app-stream-info
           streamTitle=${this.streamTitle}
           streamDescription=${this.streamDescription}
@@ -74,4 +67,4 @@ export class ViewerLanding extends LitElement {
   }
 }
 
-window.customElements.define('viewer-landing', ViewerLanding);
+window.customElements.define('app-viewer-landing', AppViewerLanding);
