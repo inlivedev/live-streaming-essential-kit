@@ -38,7 +38,7 @@ export const getServerSideProps = async (
 ) => {
   const streamId = parseInt(request.params.streamId);
 
-  // trial to use getStream module SDK
+  // use getStream module SDK
   const streamData = await InliveStream.getStream(streamId);
 
   // convert ISO time into DD longMonth YYYY - HH:MM Tmz
