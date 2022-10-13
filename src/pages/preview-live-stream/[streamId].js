@@ -1,11 +1,14 @@
 import { html } from 'lit';
 import { InliveStream } from '@inlivedev/inlive-js-sdk/stream';
 
-const PreviewLiveStream = (props) => {
+const PreviewLiveStream = (
+  /** @type {{ streamTitle: string; streamDescription: string; startTime: string; streamId: string; isScheduled: boolean; isEnded: boolean; isLive: boolean; }} */ props
+) => {
   const {
     streamTitle,
     streamDescription,
     startTime,
+    streamId,
     isScheduled,
     isEnded,
     isLive
@@ -16,6 +19,7 @@ const PreviewLiveStream = (props) => {
       streamTitle=${streamTitle}
       streamDescription=${streamDescription}
       startTime=${startTime}
+      streamId=${streamId}
       isScheduled=${isScheduled}
       isEnded=${isEnded}
       isLive=${isLive}
@@ -32,11 +36,10 @@ export default PreviewLiveStream;
 export const getServerSideProps = async (
   /** @type {{ params: { streamId: string; }; }} */ request
 ) => {
-  const streamID = parseInt(request.params.streamId);
+  const streamId = parseInt(request.params.streamId);
 
   // trial to use getStream module SDK
-  const streamData = await InliveStream.getStream(streamID);
-  console.log('cek', streamData);
+  const streamData = await InliveStream.getStream(streamId);
 
   // convert ISO time into DD longMonth YYYY - HH:MM Tmz
   let convertStartTimeStream;
@@ -64,9 +67,8 @@ export const getServerSideProps = async (
     props: {
       streamTitle: streamData.data.name,
       streamDescription: streamData.data.description,
-      //   streamDescription:
-      //     'Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical literature, discovered the undoubtable source. Lorem Ipsum comes from sections 1.10.32 and 1.10.33 of "de Finibus Bonorum et Malorum" (The Extremes of Good and Evil) by Cicero, written in 45 BC. This book is a treatise on the theory of ethics, very popular during the Renaissance. The first line of Lorem Ipsum, "Lorem ipsum dolor sit amet..", comes from a line in section 1.10.32.',
       startTime: convertStartTimeStream,
+      streamId: streamId,
       isScheduled:
         (streamData.data.start_time === null &&
           streamData.data.end_time === null) ||
