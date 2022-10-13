@@ -7,7 +7,6 @@ export class ViewerStreamInfo extends LitElement {
         margin: 0;
         padding: 0;
         background-color: white;
-        font-family: 'Inter';
         font-style: normal;
       }
 
