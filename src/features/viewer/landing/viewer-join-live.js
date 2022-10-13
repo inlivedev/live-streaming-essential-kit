@@ -19,8 +19,8 @@ export class ViewerJoinLive extends LitElement {
         border-radius: 0.375rem;
         outline: none;
         font-weight: 400;
-        font-size: 16px;
-        line-height: 24px;
+        font-size: 1rem;
+        line-height: 1.5rem;
         color: rgba(107, 114, 128, 0.8);
       }
 

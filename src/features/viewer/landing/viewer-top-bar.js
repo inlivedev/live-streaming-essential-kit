@@ -21,52 +21,52 @@ export class ViewerTopBar extends LitElement {
 
       .stream-time {
         font-weight: 600;
-        font-size: 14px;
-        line-height: 20px;
+        font-size: 0.875rem;
+        line-height: 1.25rem;
         text-align: right;
         color: #4b5563;
       }
 
       .outer-box-live {
-        padding: 2px 12px;
+        padding: 0.125rem 0.75rem;
         background: #fee2e2;
-        border-radius: 4px;
+        border-radius: 0.25rem;
       }
 
       .text-live {
         font-weight: 500;
-        font-size: 14px;
-        line-height: 20px;
+        font-size: 0.875rem;
+        line-height: 1.25rem;
         text-align: center;
         color: #991b1b;
         background: none;
       }
 
       .outer-box-upcoming {
-        padding: 2px 12px;
+        padding: 0.125rem 0.75rem;
         background: #dbeafe;
-        border-radius: 4px;
+        border-radius: 0.25rem;
       }
 
       .text-upcoming {
         font-weight: 500;
-        font-size: 14px;
-        line-height: 20px;
+        font-size: 0.875rem;
+        line-height: 1.25rem;
         text-align: center;
         color: #1e40af;
         background: none;
       }
 
       .outer-box-ended {
-        padding: 2px 12px;
+        padding: 0.125rem 0.75rem;
         background: #e5e7eb;
-        border-radius: 4px;
+        border-radius: 0.25rem;
       }
 
       .text-ended {
         font-weight: 500;
-        font-size: 14px;
-        line-height: 20px;
+        font-size: 0.875rem;
+        line-height: 1.25rem;
         text-align: center;
         color: #4b5563;
         background: none;
