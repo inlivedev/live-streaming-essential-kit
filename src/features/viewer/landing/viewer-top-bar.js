@@ -71,9 +71,6 @@ export class ViewerTopBar extends LitElement {
         color: #4b5563;
         background: none;
       }
-
-      @media (min-width: 640px) {
-      }
     `;
   }
 

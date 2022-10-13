@@ -19,9 +19,6 @@ export class AppViewerLanding extends LitElement {
         display: flex;
         flex-direction: column;
       }
-
-      @media (min-width: 640px) {
-      }
     `;
   }
 
