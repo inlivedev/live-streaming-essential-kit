@@ -1,6 +1,5 @@
-/* eslint-disable no-undef */
 import { LitElement, css, html } from 'lit';
-
+import shaka from 'shaka-player';
 export class AppPlayer extends LitElement {
   static styles = css`
     /* default style for the component */
@@ -62,20 +61,7 @@ export class AppPlayer extends LitElement {
     autoplay: { type: Boolean }
   };
 
-  loadShaka() {
-    return new Promise((resolve) => {
-      const script = document.createElement('script');
-      script.setAttribute(
-        'src',
-        'https://ajax.googleapis.com/ajax/libs/shaka-player/3.3.0/shaka-player.compiled.js'
-      );
-      script.addEventListener('load', () => resolve());
-      document.head.appendChild(script);
-    });
-  }
-
   async firstUpdated() {
-    await this.loadShaka();
     this.initApp();
   }
 
