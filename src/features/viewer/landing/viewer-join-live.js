@@ -1,7 +1,6 @@
 import { LitElement, css, html } from 'lit';
-import './app-stream-info.js';
 
-export class AppJoinLive extends LitElement {
+export class ViewerJoinLive extends LitElement {
   static get styles() {
     return css`
       * {
@@ -115,27 +114,42 @@ export class AppJoinLive extends LitElement {
 
   static get properties() {
     return {
-      showError: { type: Boolean }
+      showError: { type: Boolean },
+      streamId: { type: String }
     };
   }
 
   constructor() {
     super();
     this.showError = false;
+    this.streamId = '';
+  }
+
+  /**
+   * Check if the given string consists of alpha numeric only
+   *
+   * @param {string} string
+   * @returns {any} is the string match
+   */
+  isAlphaNumeric(string) {
+    return string.match(/^[0-9A-Za-z]+$/);
   }
 
   /**
    * Check if input has value
    *
-   * @param {string} input
+   * @param {string} input username that being input
    * @returns {any} can be text if there's input text, or just boolean show error text
    */
-  hasValue(input) {
-    if (input.trim() === '') {
-      // if title not input
+  checkValue(input) {
+    if (input.trim() === '' || input.trim().length < 3) {
+      // if username not input & less than 3
+      this.showError = true;
+    } else if (!this.isAlphaNumeric(input)) {
+      // if input username not alphanumeric
       this.showError = true;
     } else {
-      // if title input
+      // if username input
       this.showError = false;
       return input;
     }
@@ -145,15 +159,21 @@ export class AppJoinLive extends LitElement {
    * Func submit form
    *
    * @param {{ preventDefault: () => void; }} e event
-   * @returns {string} just console log
+   * @returns {any} go to the watching page
    */
   submit(e) {
     e.preventDefault();
     const form = this.renderRoot.querySelector('form[id="join-stream-form"]');
 
-    const username = form ? this.hasValue(form['username'].value) : '';
+    const username = form ? this.checkValue(form['username'].value) : null;
 
-    return console.log(username);
+    if (username !== undefined && username !== null) {
+      // save the username into local storage
+      localStorage.setItem('viewer-username', username);
+
+      // go to the next page
+      return window.location.replace('/watch-live-stream/' + this.streamId);
+    }
   }
 
   render() {
@@ -167,6 +187,7 @@ export class AppJoinLive extends LitElement {
               type="text"
               name="username"
               placeholder="Set username to watch"
+              minlength="3"
             />
             <p class="note-text ${this.showError ? 'red' : 'gray'}">
               Min 3 characters and alphanumeric only
@@ -181,4 +202,4 @@ export class AppJoinLive extends LitElement {
   }
 }
 
-window.customElements.define('app-join-live', AppJoinLive);
+window.customElements.define('viewer-join-live', ViewerJoinLive);

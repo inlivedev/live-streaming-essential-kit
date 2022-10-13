@@ -1,7 +1,7 @@
 import { LitElement, css, html } from 'lit';
-import './app-stream-info.js';
-import './app-join-live.js';
-import './app-top-bar.js';
+import './viewer-stream-info.js';
+import './viewer-join-live.js';
+import './viewer-top-bar.js';
 
 export class AppViewerLanding extends LitElement {
   static get styles() {
@@ -31,6 +31,7 @@ export class AppViewerLanding extends LitElement {
       streamTitle: { type: String },
       streamDescription: { type: String },
       startTime: { type: String },
+      streamId: { type: String },
       isScheduled: { type: String },
       isEnded: { type: String },
       isLive: { type: String }
@@ -43,6 +44,7 @@ export class AppViewerLanding extends LitElement {
     this.streamTitle = '';
     this.streamDescription = '';
     this.startTime = '';
+    this.streamId = '';
     this.isScheduled = '';
     this.isEnded = '';
     this.isLive = '';
@@ -51,17 +53,21 @@ export class AppViewerLanding extends LitElement {
   render() {
     return html`
       <div class="landing-container">
-        <app-top-bar
+        <viewer-top-bar
           startTime=${this.startTime}
           isScheduled=${this.isScheduled}
           isEnded=${this.isEnded}
           isLive=${this.isLive}
-        ></app-top-bar>
-        <app-stream-info
+        ></viewer-top-bar>
+        <viewer-stream-info
           streamTitle=${this.streamTitle}
           streamDescription=${this.streamDescription}
-        ></app-stream-info>
-        <app-join-live></app-join-live>
+        ></viewer-stream-info>
+        ${this.isLive === 'true'
+          ? html`<viewer-join-live
+              streamId=${this.streamId}
+            ></viewer-join-live>`
+          : null}
       </div>
     `;
   }

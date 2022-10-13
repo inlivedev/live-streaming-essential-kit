@@ -1,6 +1,6 @@
 import { LitElement, css, html } from 'lit';
 
-export class AppTopBar extends LitElement {
+export class ViewerTopBar extends LitElement {
   static get styles() {
     return css`
       * {
@@ -118,4 +118,4 @@ export class AppTopBar extends LitElement {
   }
 }
 
-window.customElements.define('app-top-bar', AppTopBar);
+window.customElements.define('viewer-top-bar', ViewerTopBar);

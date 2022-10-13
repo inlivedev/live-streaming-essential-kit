@@ -1,6 +1,6 @@
 import { LitElement, css, html } from 'lit';
 
-export class AppStreamInfo extends LitElement {
+export class ViewerStreamInfo extends LitElement {
   static get styles() {
     return css`
       * {
@@ -75,4 +75,4 @@ export class AppStreamInfo extends LitElement {
   }
 }
 
-window.customElements.define('app-stream-info', AppStreamInfo);
+window.customElements.define('viewer-stream-info', ViewerStreamInfo);
