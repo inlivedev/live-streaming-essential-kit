@@ -5,8 +5,6 @@ import { nodeResolve } from '@rollup/plugin-node-resolve';
 import commonjs from '@rollup/plugin-commonjs';
 import del from 'rollup-plugin-delete';
 import { serve } from './src/scripts/reload-server.js';
-import replace from '@rollup/plugin-replace';
-import dotenv from 'dotenv';
 
 const packageJson = JSON.parse(
   readFileSync(new URL('package.json', import.meta.url))
@@ -55,14 +53,7 @@ export default [
         targets: 'build/__client'
       }),
       nodeResolve(),
-      commonjs(),
-      replace({
-        process: JSON.stringify({
-          env: {
-            ...dotenv.config().parsed
-          }
-        })
-      })
+      commonjs()
     ],
     watch: {
       chokidar: {},
