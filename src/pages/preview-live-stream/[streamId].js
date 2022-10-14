@@ -69,10 +69,7 @@ export const getServerSideProps = async (
       streamDescription: streamData.data.description,
       startTime: convertStartTimeStream,
       streamId: streamId,
-      isScheduled:
-        (streamData.data.start_time === null &&
-          streamData.data.end_time === null) ||
-        (streamData.data.start_time === '' && streamData.data.end_time === ''),
+      isScheduled: !streamData.data.start_time && !streamData.data.end_time,
       isEnded:
         streamData.data.start_time !== null &&
         streamData.data.end_time !== null &&
@@ -81,7 +78,7 @@ export const getServerSideProps = async (
       isLive:
         streamData.data.start_time !== null &&
         streamData.data.start_time !== '' &&
-        (streamData.data.end_time === null || streamData.data.end_time === '')
+        !streamData.data.end_time
     }
   };
 };
