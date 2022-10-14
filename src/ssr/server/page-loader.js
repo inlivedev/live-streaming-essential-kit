@@ -58,10 +58,7 @@ const readPagesRecursive = async (fastify, rootPath, currentPath) => {
           if (individualPath === 'index') {
             splitPath.pop();
             pathCounter--;
-            individualPath = splitPath[pathCounter];
-          }
-
-          if (
+          } else if (
             individualPath[0] === '_' &&
             individualPath[individualPath.length - 1] === '_'
           ) {
@@ -71,8 +68,10 @@ const readPagesRecursive = async (fastify, rootPath, currentPath) => {
             );
             splitPath[pathCounter] = `:${individualPath}`;
             pathCounter--;
+          } else {
+            pathCounter--;
           }
-        } while (pathCounter > 1);
+        } while (pathCounter > 0);
 
         urlpath = splitPath.join('/');
         urlpath = urlpath ? urlpath : '/';
