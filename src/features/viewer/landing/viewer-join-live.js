@@ -93,7 +93,7 @@ export class ViewerJoinLive extends LitElement {
         align-self: center;
       }
 
-      @media (min-width: 640px) {
+      @media (min-width: 1024px) {
         .join-form {
           width: 30rem;
         }

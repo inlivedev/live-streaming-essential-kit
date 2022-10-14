@@ -30,7 +30,7 @@ export class ViewerStreamInfo extends LitElement {
         margin-top: 0.25rem;
       }
 
-      @media (min-width: 640px) {
+      @media (min-width: 1024px) {
         .text-container {
           width: 68%;
           margin: 1rem auto 0 auto;
