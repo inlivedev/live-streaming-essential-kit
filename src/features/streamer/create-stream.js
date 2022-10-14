@@ -141,7 +141,7 @@ export class CreateStream extends LitElement {
         margin-top: 0.25rem;
       }
 
-      @media (min-width: 640px) {
+      @media (min-width: 1024px) {
         .create-form {
           width: 30rem;
         }
@@ -216,8 +216,7 @@ export class CreateStream extends LitElement {
 
     // trial hard-code
     let config = {
-      api_key:
-        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NjU5ODI0NjAsImp0aSI6ImY2M2IzNjU5LTIyMGMtNDM5MC1hYmJiLTgyNGRmZjg2MjdmNCIsImlhdCI6MTY2NTM3NzY2MCwiaXNzIjoiaW5saXZlIiwiZGJpZCI6MzgsIlRva2VuVHlwZSI6ImFwaWtleSIsIlVzZXIiOnsiaWQiOjMxLCJ1c2VybmFtZSI6IiIsInBhc3N3b3JkIjoiIiwiY29uZmlybV9wYXNzd29yZCI6IiIsIm5hbWUiOiIiLCJsb2dpbl90eXBlIjowLCJlbWFpbCI6IiIsInJvbGVfaWQiOjAsInBpY3R1cmVfdXJsIjoiIiwiaXNfYWN0aXZlIjpmYWxzZSwicmVnaXN0ZXJfZGF0ZSI6IjAwMDEtMDEtMDFUMDA6MDA6MDBaIiwidXBkYXRlZF9kYXRlIjpudWxsfX0.mgNE8V0GR0fdF7fe0efsr_nztzsIdmur9mnvQ-7DXJ4'
+      api_key: ''
     };
 
     const inliveApp = InliveApp.init(config);
