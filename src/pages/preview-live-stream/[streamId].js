@@ -2,17 +2,10 @@ import { html } from 'lit';
 import { InliveStream } from '@inlivedev/inlive-js-sdk/stream';
 
 const PreviewLiveStream = (
-  /** @type {{ streamTitle: string; streamDescription: string; startTime: string; streamId: string; isScheduled: boolean; isEnded: boolean; isLive: boolean; }} */ props
+  /** @type {{ streamTitle: string; streamDescription: string; startTime: string; streamId: string; streamStatus: string; }} */ props
 ) => {
-  const {
-    streamTitle,
-    streamDescription,
-    startTime,
-    streamId,
-    isScheduled,
-    isEnded,
-    isLive
-  } = props;
+  const { streamTitle, streamDescription, startTime, streamId, streamStatus } =
+    props;
 
   return html`
     <app-viewer-landing
@@ -20,9 +13,7 @@ const PreviewLiveStream = (
       streamDescription=${streamDescription}
       startTime=${startTime}
       streamId=${streamId}
-      isScheduled=${isScheduled}
-      isEnded=${isEnded}
-      isLive=${isLive}
+      streamStatus=${streamStatus}
     ></app-viewer-landing>
   `;
 };
@@ -63,22 +54,31 @@ export const getServerSideProps = async (
     convertStartTimeStream = date + ' - ' + time;
   }
 
+  let streamStatus;
+  if (!streamData.data.start_time && !streamData.data.end_time) {
+    streamStatus = 'streamScheduled';
+  } else if (
+    streamData.data.start_time !== null &&
+    streamData.data.end_time !== null &&
+    streamData.data.start_time !== '' &&
+    streamData.data.end_time !== ''
+  ) {
+    streamStatus = 'streamEnded';
+  } else if (
+    streamData.data.start_time !== null &&
+    streamData.data.start_time !== '' &&
+    !streamData.data.end_time
+  ) {
+    streamStatus = 'streamLive';
+  }
+
   return {
     props: {
       streamTitle: streamData.data.name,
       streamDescription: streamData.data.description,
       startTime: convertStartTimeStream,
       streamId: streamId,
-      isScheduled: !streamData.data.start_time && !streamData.data.end_time,
-      isEnded:
-        streamData.data.start_time !== null &&
-        streamData.data.end_time !== null &&
-        streamData.data.start_time !== '' &&
-        streamData.data.end_time !== '',
-      isLive:
-        streamData.data.start_time !== null &&
-        streamData.data.start_time !== '' &&
-        !streamData.data.end_time
+      streamStatus: streamStatus
     }
   };
 };

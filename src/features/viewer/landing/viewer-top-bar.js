@@ -76,33 +76,29 @@ export class ViewerTopBar extends LitElement {
   static get properties() {
     return {
       startTime: { type: String },
-      isScheduled: { type: String },
-      isEnded: { type: String },
-      isLive: { type: String }
+      streamStatus: { type: String }
     };
   }
 
   constructor() {
     super();
     this.startTime = '';
-    this.isScheduled = '';
-    this.isEnded = '';
-    this.isLive = '';
+    this.streamStatus = '';
   }
 
   render() {
     return html`
       <!-- can be changed later on with lozenges component -->
       <div class="top-info">
-        ${this.isLive === 'true'
+        ${this.streamStatus === 'streamLive'
           ? html`<div class="outer-box-live">
               <p class="text-live">LIVE</p>
             </div>`
-          : this.isScheduled === 'true'
+          : this.streamStatus === 'streamScheduled'
           ? html`<div class="outer-box-upcoming">
               <p class="text-upcoming">UPCOMING</p>
             </div>`
-          : this.isEnded === 'true'
+          : this.streamStatus === 'streamEnded'
           ? html`<div class="outer-box-ended">
               <p class="text-ended">ENDED</p>
             </div>`

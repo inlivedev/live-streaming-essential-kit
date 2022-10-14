@@ -28,9 +28,7 @@ export class AppViewerLanding extends LitElement {
       streamDescription: { type: String },
       startTime: { type: String },
       streamId: { type: String },
-      isScheduled: { type: String },
-      isEnded: { type: String },
-      isLive: { type: String }
+      streamStatus: { type: String }
     };
   }
 
@@ -41,9 +39,7 @@ export class AppViewerLanding extends LitElement {
     this.streamDescription = '';
     this.startTime = '';
     this.streamId = '';
-    this.isScheduled = '';
-    this.isEnded = '';
-    this.isLive = '';
+    this.streamStatus = '';
   }
 
   render() {
@@ -51,15 +47,13 @@ export class AppViewerLanding extends LitElement {
       <div class="landing-container">
         <viewer-top-bar
           startTime=${this.startTime}
-          isScheduled=${this.isScheduled}
-          isEnded=${this.isEnded}
-          isLive=${this.isLive}
+          streamStatus=${this.streamStatus}
         ></viewer-top-bar>
         <viewer-stream-info
           streamTitle=${this.streamTitle}
           streamDescription=${this.streamDescription}
         ></viewer-stream-info>
-        ${this.isLive === 'true'
+        ${this.streamStatus === 'streamLive'
           ? html`<viewer-join-live
               streamId=${this.streamId}
             ></viewer-join-live>`
