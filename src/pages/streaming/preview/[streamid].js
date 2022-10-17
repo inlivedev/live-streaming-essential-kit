@@ -74,11 +74,11 @@ export const getServerSideProps = async (
 
   return {
     props: {
-      streamTitle: streamData.data.name,
-      streamDescription: streamData.data.description,
-      startTime: convertStartTimeStream,
+      streamTitle: streamData.data.name || '',
+      streamDescription: streamData.data.description || '',
+      startTime: convertStartTimeStream || '',
       streamId: streamId,
-      streamStatus: streamStatus
+      streamStatus: streamStatus || ''
     }
   };
 };
