@@ -2,10 +2,10 @@ import { html } from 'lit';
 import { InliveStream } from '@inlivedev/inlive-js-sdk/stream';
 
 const PreviewLiveStream = (
-  /** @type {{ streamTitle: string; streamDescription: string; startTime: string; streamId: string; streamStatus: string; }} */ props
+  /** @type {{ streamTitle: string; streamDescription: string; startTime: string; streamId: string; streamStatus: string; }} */ properties
 ) => {
   const { streamTitle, streamDescription, startTime, streamId, streamStatus } =
-    props;
+    properties;
 
   return html`
     <app-viewer-landing
@@ -25,9 +25,9 @@ export const scripts = `
 export default PreviewLiveStream;
 
 export const getServerSideProps = async (
-  /** @type {{ params: { streamId: string; }; }} */ request
+  /** @type {{ params: { streamid: string; }; }} */ request
 ) => {
-  const streamId = parseInt(request.params.streamId);
+  const streamId = Number.parseInt(request.params.streamid);
 
   // use getStream module SDK
   const streamData = await InliveStream.getStream(streamId);
