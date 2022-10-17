@@ -204,7 +204,6 @@ export class ViewerJoinLive extends LitElement {
               class="input-field ${this.showError ? 'red' : 'gray'}"
               type="text"
               name="username"
-              id="user"
               placeholder="Set username to watch"
               minlength="3"
               @keyup=${(/** @type {{ target: { value: any; }; }} */ event) =>
