@@ -1,7 +1,3 @@
-import jwt from 'jsonwebtoken';
-
-const { JWT_SECRET, JWT_EXPIRES_IN } = process.env;
-
 const handler = async (request, reply) => {
   const name = request?.params?.name;
 
@@ -15,7 +11,9 @@ const handler = async (request, reply) => {
       if (!validCredentials)
         reply.code(400).send({ message: 'Invalid credentials' });
 
-      const token = await tokenGenerator(username);
+      const token = await reply.jwtSign({
+        username: `${username}${Date.now()}`
+      });
 
       reply.setCookie('token', token, {
         path: '/',
@@ -32,7 +30,7 @@ const handler = async (request, reply) => {
       const token = request?.headers?.cookie?.replace('token=', '');
       if (!token) reply.code(401).send({ message: 'You are not authorize' });
 
-      const verify = await jwt.verify(token, JWT_SECRET);
+      const verify = await request.jwtVerify();
 
       if (Date.now() / 1000 < parseInt(verify.exp)) {
         reply.code(200).send({ success: true });
@@ -41,17 +39,6 @@ const handler = async (request, reply) => {
       throw new Error(err);
     }
   }
-};
-
-/**
- * @summary A function to get token
- * @param {string} username of login user
- * @returns {Promise<string>} value of token
- */
-const tokenGenerator = async (username) => {
-  return jwt.sign({ username: `${username}${Date.now()}` }, JWT_SECRET, {
-    expiresIn: JWT_EXPIRES_IN
-  });
 };
 
 export default handler;
