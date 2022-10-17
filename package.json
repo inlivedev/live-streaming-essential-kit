@@ -4,12 +4,12 @@
   "license": "MIT",
   "type": "module",
   "dependencies": {
+    "@fastify/cookie": "^8.3.0",
     "@fastify/static": "^6.5.0",
     "@inlivedev/inlive-js-sdk": "^0.1.0",
     "@lit-labs/ssr": "2.2.3",
     "dotenv": "^16.0.3",
     "fastify": "^4.8.1",
-    "fastify-cookie": "^5.7.0",
     "jsonwebtoken": "^8.5.1",
     "lit": "2.3.1",
     "node-fetch": "^3.2.10",
