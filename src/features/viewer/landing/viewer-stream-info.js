@@ -28,16 +28,13 @@ export class ViewerStreamInfo extends LitElement {
         line-height: 1.25rem;
         color: #6b7280;
         margin-top: 0.25rem;
+        text-align: center;
       }
 
       @media (min-width: 1024px) {
         .text-container {
           width: 68%;
           margin: 1rem auto 0 auto;
-        }
-
-        .stream-description {
-          text-align: center;
         }
       }
     `;
@@ -63,11 +60,7 @@ export class ViewerStreamInfo extends LitElement {
       <div class="stream-info-container">
         <div class="text-container">
           <div class="stream-title">${this.streamTitle}</div>
-          ${this.streamDescription !== ''
-            ? html`<div class="stream-description">
-                ${this.streamDescription}
-              </div>`
-            : null}
+          <div class="stream-description">${this.streamDescription}</div>
         </div>
       </div>
     `;
