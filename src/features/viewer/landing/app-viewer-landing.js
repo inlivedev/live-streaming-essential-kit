@@ -18,6 +18,29 @@ export class AppViewerLanding extends LitElement {
         display: flex;
         flex-direction: column;
       }
+
+      .notify-me-button {
+        position: absolute;
+        bottom: 2.5rem;
+        width: 92%;
+        padding: 0.563rem 1.063rem;
+        border: none;
+        background: #ffffff;
+        border: 1px solid #d1d5db;
+        box-shadow: 0px 0.063rem 0.125rem rgba(0, 0, 0, 0.05);
+        border-radius: 0.375rem;
+        font-weight: 500;
+        font-size: 0.875rem;
+        line-height: 1.25rem;
+        color: #1f2937;
+        cursor: pointer;
+        align-self: center;
+      }
+
+      .notify-me-button.disable {
+        opacity: 0.4;
+        cursor: not-allowed;
+      }
     `;
   }
 
@@ -53,11 +76,18 @@ export class AppViewerLanding extends LitElement {
           streamTitle=${this.streamTitle}
           streamDescription=${this.streamDescription}
         ></viewer-stream-info>
-        ${this.streamStatus === 'streamLive'
-          ? html`<viewer-join-live
-              streamId=${this.streamId}
-            ></viewer-join-live>`
-          : null}
+        ${this.streamStatus === 'streamScheduled'
+          ? html`
+              <button type="button" disabled class="notify-me-button disable">
+                Notify Me
+              </button>
+            `
+          : html`
+              <viewer-join-live
+                streamId=${this.streamId}
+                streamStatus=${this.streamStatus}
+              ></viewer-join-live>
+            `}
       </div>
     `;
   }
