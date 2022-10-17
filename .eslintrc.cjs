@@ -9,19 +9,13 @@ module.exports = {
     'plugin:@typescript-eslint/recommended',
     'plugin:prettier/recommended',
     'plugin:jsdoc/recommended',
-    'plugin:promise/recommended',
-    'plugin:unicorn/recommended'
+    'plugin:promise/recommended'
   ],
   parser: '@typescript-eslint/parser',
   parserOptions: {
     ecmaVersion: 'latest',
     sourceType: 'module'
   },
-  plugins: ['@typescript-eslint', 'jsdoc', 'prettier', 'promise', 'unicorn'],
-  rules: {
-    camelcase: ['error', { properties: 'always' }],
-    eqeqeq: ['error', 'always'],
-    'unicorn/prefer-ternary': ['error', 'only-single-line']
-  },
+  plugins: ['@typescript-eslint', 'jsdoc', 'prettier', 'promise'],
   ignorePatterns: ['node_modules']
 };

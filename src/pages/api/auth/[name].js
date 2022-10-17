@@ -19,7 +19,8 @@ const handler = async (request, reply) => {
 
       reply.setCookie('token', token, {
         path: '/',
-        sameSite: 'strict'
+        sameSite: 'strict',
+        httpOnly: true
       });
 
       reply.code(200).send({ success: true });
@@ -28,7 +29,7 @@ const handler = async (request, reply) => {
     }
   } else if (name === 'validation') {
     try {
-      const token = request?.headers?.authorization?.replace('Bearer ', '');
+      const token = request?.headers?.cookie?.replace('token=', '');
       if (!token) reply.code(401).send({ message: 'You are not authorize' });
 
       const verify = await jwt.verify(token, JWT_SECRET);
