@@ -20,6 +20,7 @@ module.exports = {
   plugins: ['@typescript-eslint', 'jsdoc', 'prettier', 'promise', 'unicorn'],
   rules: {
     camelcase: ['error', { properties: 'always' }],
+    eqeqeq: ['error', 'always'],
     'unicorn/prefer-ternary': ['error', 'only-single-line']
   },
   ignorePatterns: ['node_modules']
