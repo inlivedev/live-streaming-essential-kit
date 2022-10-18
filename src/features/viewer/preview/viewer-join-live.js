@@ -193,7 +193,7 @@ export class ViewerJoinLive extends LitElement {
       localStorage.setItem('viewer-username', username);
 
       // go to the next page
-      return window.location.replace('/streaming/watch/' + this.streamId);
+      return (window.location.href = `/streaming/watch/${this.streamId}`);
     }
   }
 
