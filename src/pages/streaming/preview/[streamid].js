@@ -2,32 +2,32 @@ import { html } from 'lit';
 import { InliveStream } from '@inlivedev/inlive-js-sdk/stream';
 
 const PreviewLiveStream = (
-  /** @type {{ streamTitle: string; streamDescription: string; startTime: string; streamId: string; streamStatus: string; }} */ props
+  /** @type {{ streamTitle: string; streamDescription: string; startTime: string; streamId: string; streamStatus: string; }} */ properties
 ) => {
   const { streamTitle, streamDescription, startTime, streamId, streamStatus } =
-    props;
+    properties;
 
   return html`
-    <app-viewer-landing
+    <app-viewer-preview
       streamTitle=${streamTitle}
       streamDescription=${streamDescription}
       startTime=${startTime}
       streamId=${streamId}
       streamStatus=${streamStatus}
-    ></app-viewer-landing>
+    ></app-viewer-preview>
   `;
 };
 
 export const scripts = `
-<script type="module" src="/__client/features/viewer/landing/app-viewer-landing.js"></script>
+<script type="module" src="/__client/features/viewer/preview/app-viewer-preview.js"></script>
 `;
 
 export default PreviewLiveStream;
 
 export const getServerSideProps = async (
-  /** @type {{ params: { streamId: string; }; }} */ request
+  /** @type {{ params: { streamid: string; }; }} */ request
 ) => {
-  const streamId = parseInt(request.params.streamId);
+  const streamId = Number.parseInt(request.params.streamid);
 
   // use getStream module SDK
   const streamData = await InliveStream.getStream(streamId);
@@ -74,9 +74,9 @@ export const getServerSideProps = async (
 
   return {
     props: {
-      streamTitle: streamData.data.name,
-      streamDescription: streamData.data.description,
-      startTime: convertStartTimeStream,
+      streamTitle: streamData.data.name || '',
+      streamDescription: streamData.data.description || '',
+      startTime: convertStartTimeStream || '',
       streamId: streamId,
       streamStatus: streamStatus
     }
