@@ -3,20 +3,20 @@ import './viewer-stream-info.js';
 import './viewer-join-live.js';
 import './viewer-top-bar.js';
 
-export class AppViewerLanding extends LitElement {
+export class AppViewerPreview extends LitElement {
   static get styles() {
     return css`
       * {
         margin: 0;
         padding: 0;
-        background-color: white;
         font-style: normal;
       }
 
-      .landing-container {
-        padding: 0 1rem;
+      .preview-container {
+        height: 100vh;
         display: flex;
         flex-direction: column;
+        background: linear-gradient(0deg, #eff6ff 0%, #ffffff 100%);
       }
     `;
   }
@@ -44,7 +44,7 @@ export class AppViewerLanding extends LitElement {
 
   render() {
     return html`
-      <div class="landing-container">
+      <div class="preview-container">
         <viewer-top-bar
           startTime=${this.startTime}
           streamStatus=${this.streamStatus}
@@ -53,14 +53,17 @@ export class AppViewerLanding extends LitElement {
           streamTitle=${this.streamTitle}
           streamDescription=${this.streamDescription}
         ></viewer-stream-info>
-        ${this.streamStatus === 'streamLive'
-          ? html`<viewer-join-live
-              streamId=${this.streamId}
-            ></viewer-join-live>`
-          : null}
+        ${this.streamStatus === 'streamScheduled'
+          ? undefined
+          : html`
+              <viewer-join-live
+                streamId=${this.streamId}
+                streamStatus=${this.streamStatus}
+              ></viewer-join-live>
+            `}
       </div>
     `;
   }
 }
 
-window.customElements.define('app-viewer-landing', AppViewerLanding);
+window.customElements.define('app-viewer-preview', AppViewerPreview);
