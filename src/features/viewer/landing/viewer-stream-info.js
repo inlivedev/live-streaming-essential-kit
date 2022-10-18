@@ -6,28 +6,28 @@ export class ViewerStreamInfo extends LitElement {
       * {
         margin: 0;
         padding: 0;
-        background-color: white;
         font-style: normal;
       }
 
       .text-container {
         margin-top: 1rem;
+        padding: 0 1rem;
       }
 
       .stream-title {
         font-weight: 700;
-        font-size: 1.25rem;
-        line-height: 1.75rem;
+        font-size: 1.5rem;
+        line-height: 2rem;
         text-align: center;
         color: #1f2937;
       }
 
       .stream-description {
         font-weight: 400;
-        font-size: 0.875rem;
-        line-height: 1.25rem;
+        font-size: 1rem;
+        line-height: 1.5rem;
         color: #6b7280;
-        margin-top: 0.25rem;
+        margin-top: 0.75rem;
         text-align: center;
       }
 

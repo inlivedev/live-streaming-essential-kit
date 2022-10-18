@@ -6,7 +6,6 @@ export class ViewerTopBar extends LitElement {
       * {
         margin: 0;
         padding: 0;
-        background-color: white;
         font-style: normal;
       }
 
@@ -14,7 +13,7 @@ export class ViewerTopBar extends LitElement {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        padding: 1rem 0;
+        padding: 1rem;
         margin-top: 3rem;
       }
 
@@ -94,15 +93,17 @@ export class ViewerTopBar extends LitElement {
           ? html`<div class="outer-box-live">
               <p class="text-live">LIVE</p>
             </div>`
-          : this.streamStatus === 'streamScheduled'
+          : undefined}
+        ${this.streamStatus === 'streamScheduled'
           ? html`<div class="outer-box-upcoming">
               <p class="text-upcoming">UPCOMING</p>
             </div>`
-          : this.streamStatus === 'streamEnded'
+          : undefined}
+        ${this.streamStatus === 'streamEnded'
           ? html`<div class="outer-box-ended">
               <p class="text-ended">ENDED</p>
             </div>`
-          : null}
+          : undefined}
 
         <div class="stream-time">${this.startTime}</div>
       </div>

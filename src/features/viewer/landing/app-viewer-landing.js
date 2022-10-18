@@ -9,14 +9,15 @@ export class AppViewerLanding extends LitElement {
       * {
         margin: 0;
         padding: 0;
-        background-color: white;
         font-style: normal;
       }
 
       .landing-container {
-        padding: 0 1rem;
+        height: 100vh;
+        // padding: 0 1rem;
         display: flex;
         flex-direction: column;
+        background: linear-gradient(0deg, #eff6ff 0%, #ffffff 100%);
       }
     `;
   }

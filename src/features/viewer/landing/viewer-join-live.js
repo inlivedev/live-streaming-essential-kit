@@ -6,7 +6,7 @@ export class ViewerJoinLive extends LitElement {
       * {
         margin: 0;
         padding: 0;
-        background-color: white;
+
         font-style: normal;
       }
 
@@ -55,14 +55,16 @@ export class ViewerJoinLive extends LitElement {
 
       .join-form {
         margin: 0 auto;
+        padding: 1.5rem 1rem 2.5rem 1rem;
         text-align: left;
         display: flex;
         flex-direction: column;
         width: 100%;
         position: absolute;
-        bottom: 2.5rem;
+        bottom: 0;
         align-self: center;
         width: 92%;
+        background-color: white;
       }
 
       .join-container {
@@ -102,6 +104,7 @@ export class ViewerJoinLive extends LitElement {
       @media (min-width: 1024px) {
         .join-form {
           width: 30rem;
+          background-color: transparent;
         }
 
         .submit-button {

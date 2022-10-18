@@ -78,7 +78,7 @@ export const getServerSideProps = async (
       streamDescription: streamData.data.description || '',
       startTime: convertStartTimeStream || '',
       streamId: streamId,
-      streamStatus: streamStatus || ''
+      streamStatus: streamStatus
     }
   };
 };
