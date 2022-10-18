@@ -8,18 +8,18 @@ const PreviewLiveStream = (
     properties;
 
   return html`
-    <app-viewer-landing
+    <app-viewer-preview
       streamTitle=${streamTitle}
       streamDescription=${streamDescription}
       startTime=${startTime}
       streamId=${streamId}
       streamStatus=${streamStatus}
-    ></app-viewer-landing>
+    ></app-viewer-preview>
   `;
 };
 
 export const scripts = `
-<script type="module" src="/__client/features/viewer/landing/app-viewer-landing.js"></script>
+<script type="module" src="/__client/features/viewer/preview/app-viewer-preview.js"></script>
 `;
 
 export default PreviewLiveStream;

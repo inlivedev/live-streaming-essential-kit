@@ -3,7 +3,7 @@ import './viewer-stream-info.js';
 import './viewer-join-live.js';
 import './viewer-top-bar.js';
 
-export class AppViewerLanding extends LitElement {
+export class AppViewerPreview extends LitElement {
   static get styles() {
     return css`
       * {
@@ -12,7 +12,7 @@ export class AppViewerLanding extends LitElement {
         font-style: normal;
       }
 
-      .landing-container {
+      .preview-container {
         height: 100vh;
         display: flex;
         flex-direction: column;
@@ -44,7 +44,7 @@ export class AppViewerLanding extends LitElement {
 
   render() {
     return html`
-      <div class="landing-container">
+      <div class="preview-container">
         <viewer-top-bar
           startTime=${this.startTime}
           streamStatus=${this.streamStatus}
@@ -66,4 +66,4 @@ export class AppViewerLanding extends LitElement {
   }
 }
 
-window.customElements.define('app-viewer-landing', AppViewerLanding);
+window.customElements.define('app-viewer-preview', AppViewerPreview);
