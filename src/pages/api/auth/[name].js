@@ -1,6 +1,14 @@
 const handler = async (request, reply) => {
   const name = request?.params?.name;
 
+  if (request.method !== 'POST') {
+    reply.code(400).send({
+      success: false,
+      code: 400,
+      message: 'Method is not allowed'
+    });
+  }
+
   if (name === 'login-with-credentials') {
     try {
       const { username, password } = request.body;
