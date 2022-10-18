@@ -30,8 +30,8 @@ const handler = async (request, reply) => {
       });
 
       reply.code(200).send({ success: true });
-    } catch (err) {
-      throw new Error(err);
+    } catch (error) {
+      throw new Error(error);
     }
   } else if (name === 'validation') {
     try {
@@ -40,11 +40,11 @@ const handler = async (request, reply) => {
 
       const verify = await request.jwtVerify();
 
-      if (Date.now() / 1000 < parseInt(verify.exp)) {
+      if (Date.now() / 1000 < Number.parseInt(verify.exp)) {
         reply.code(200).send({ success: true });
       }
-    } catch (err) {
-      throw new Error(err);
+    } catch (error) {
+      throw new Error(error);
     }
   }
 };
