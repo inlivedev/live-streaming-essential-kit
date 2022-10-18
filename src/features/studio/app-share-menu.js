@@ -13,6 +13,7 @@ class AppShareMenu extends LitElement {
     }
 
     .share-menu-item-button {
+      font-family: inherit;
       text-align: left;
       display: block;
       width: 100%;
