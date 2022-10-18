@@ -14,7 +14,6 @@ export class AppViewerLanding extends LitElement {
 
       .landing-container {
         height: 100vh;
-        // padding: 0 1rem;
         display: flex;
         flex-direction: column;
         background: linear-gradient(0deg, #eff6ff 0%, #ffffff 100%);
