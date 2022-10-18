@@ -16,6 +16,12 @@ module.exports = {
     ecmaVersion: 'latest',
     sourceType: 'module'
   },
-  plugins: ['@typescript-eslint', 'jsdoc', 'prettier', 'promise'],
+  plugins: ['@typescript-eslint', 'jsdoc', 'prettier', 'promise', 'unicorn'],
+  rules: {
+    camelcase: ['error', { properties: 'always' }],
+    eqeqeq: ['error', 'always'],
+    'unicorn/prefer-ternary': ['error', 'only-single-line'],
+    'unicorn/template-indent': 'off'
+  },
   ignorePatterns: ['node_modules']
 };
