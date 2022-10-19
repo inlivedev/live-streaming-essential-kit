@@ -6,7 +6,7 @@ export class ViewerJoinLive extends LitElement {
       * {
         margin: 0;
         padding: 0;
-        background-color: white;
+
         font-style: normal;
       }
 
@@ -55,14 +55,16 @@ export class ViewerJoinLive extends LitElement {
 
       .join-form {
         margin: 0 auto;
+        padding: 1.5rem 1rem 2.5rem 1rem;
         text-align: left;
         display: flex;
         flex-direction: column;
         width: 100%;
         position: absolute;
-        bottom: 2.5rem;
+        bottom: 0;
         align-self: center;
         width: 92%;
+        background-color: white;
       }
 
       .join-container {
@@ -89,13 +91,20 @@ export class ViewerJoinLive extends LitElement {
         font-size: 0.875rem;
         line-height: 1.25rem;
         color: #ffffff;
-        cursor: pointer;
         align-self: center;
+        opacity: 0.4;
+        cursor: not-allowed;
+      }
+
+      .submit-button.enable {
+        opacity: 1;
+        cursor: pointer;
       }
 
       @media (min-width: 1024px) {
         .join-form {
           width: 30rem;
+          background-color: transparent;
         }
 
         .submit-button {
@@ -114,7 +123,9 @@ export class ViewerJoinLive extends LitElement {
   static get properties() {
     return {
       showError: { type: Boolean },
-      streamId: { type: String }
+      streamId: { type: String },
+      streamStatus: { type: String },
+      enabledButton: { type: Boolean }
     };
   }
 
@@ -122,16 +133,27 @@ export class ViewerJoinLive extends LitElement {
     super();
     this.showError = false;
     this.streamId = '';
+    this.streamStatus = '';
+    this.enabledButton = false;
+  }
+
+  /**
+   * To check input box is typed
+   *
+   * @param {string} inputText input text when typing
+   */
+  enableDisableButton(inputText) {
+    this.enabledButton = inputText.trim() !== '' ? true : false;
   }
 
   /**
    * Check if the given string consists of alpha numeric only
    *
-   * @param {string} string
+   * @param {string} string input text checking
    * @returns {any} is the string match
    */
   isAlphaNumeric(string) {
-    return string.match(/^[0-9A-Za-z]+$/);
+    return string.match(/^[\dA-Za-z]+$/);
   }
 
   /**
@@ -157,21 +179,21 @@ export class ViewerJoinLive extends LitElement {
   /**
    * Func submit form
    *
-   * @param {{ preventDefault: () => void; }} e event
+   * @param {{ preventDefault: () => void; }} event event
    * @returns {any} go to the watching page
    */
-  submit(e) {
-    e.preventDefault();
+  submit(event) {
+    event.preventDefault();
     const form = this.renderRoot.querySelector('form[id="join-stream-form"]');
 
-    const username = form ? this.checkValue(form['username'].value) : null;
+    const username = form ? this.checkValue(form['username'].value) : undefined;
 
     if (username !== undefined && username !== null) {
       // save the username into local storage
       localStorage.setItem('viewer-username', username);
 
       // go to the next page
-      return window.location.replace('/watch-live-stream/' + this.streamId);
+      return (window.location.href = `/streaming/watch/${this.streamId}`);
     }
   }
 
@@ -187,13 +209,24 @@ export class ViewerJoinLive extends LitElement {
               name="username"
               placeholder="Set username to watch"
               minlength="3"
+              @keyup=${(/** @type {{ target: { value: any; }; }} */ event) =>
+                this.enableDisableButton(event.target.value)}
             />
             <p class="note-text ${this.showError ? 'red' : 'gray'}">
               Min 3 characters and alphanumeric only
             </p>
           </div>
         </form>
-        <button type="submit" class="submit-button" @click="${this.submit}">
+        <button
+          type="submit"
+          class="submit-button ${this.enabledButton &&
+          this.streamStatus === 'streamLive'
+            ? 'enable'
+            : undefined}"
+          @click="${this.enabledButton && this.streamStatus === 'streamLive'
+            ? this.submit
+            : undefined}"
+        >
           Watch Live
         </button>
       </div>

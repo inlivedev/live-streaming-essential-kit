@@ -21,7 +21,8 @@ module.exports = {
   rules: {
     camelcase: ['error', { properties: 'always' }],
     eqeqeq: ['error', 'always'],
-    'unicorn/prefer-ternary': ['error', 'only-single-line']
+    'unicorn/prefer-ternary': ['error', 'only-single-line'],
+    'unicorn/template-indent': 'off'
   },
   ignorePatterns: ['node_modules']
 };
