@@ -4,12 +4,15 @@
   "license": "MIT",
   "type": "module",
   "dependencies": {
+    "@fastify/cookie": "^8.3.0",
+    "@fastify/jwt": "^6.3.2",
     "@fastify/static": "^6.5.0",
     "@inlivedev/inlive-js-sdk": "^0.1.0",
     "@lit-labs/ssr": "2.2.3",
     "dotenv": "^16.0.3",
-    "fastify": "4.7.0",
+    "fastify": "^4.8.1",
     "lit": "2.3.1",
+    "node-fetch": "^3.2.10",
     "shaka-player": "^4.2.2"
   },
   "scripts": {
@@ -31,6 +34,7 @@
     "eslint-plugin-jsdoc": "^39.3.6",
     "eslint-plugin-prettier": "^4.2.1",
     "eslint-plugin-promise": "^6.0.1",
+    "eslint-plugin-unicorn": "^44.0.2",
     "globby": "^13.1.2",
     "husky": "^8.0.0",
     "lint-staged": "^13.0.3",
