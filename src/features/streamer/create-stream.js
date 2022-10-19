@@ -1,6 +1,5 @@
 import { LitElement, css, html } from 'lit';
-import { InliveApp } from '@inlivedev/inlive-js-sdk/app';
-import { InliveStream } from '@inlivedev/inlive-js-sdk/stream';
+import { fetchHttp } from '../shared/modules/fetch-http.js';
 
 export class CreateStream extends LitElement {
   static get styles() {
@@ -169,7 +168,7 @@ export class CreateStream extends LitElement {
   /**
    * Check if input has value
    *
-   * @param {string} input
+   * @param {string} input input stream name
    * @returns {any} can be text if there's input text, or just boolean show error text
    */
   hasValue(input) {
@@ -184,29 +183,12 @@ export class CreateStream extends LitElement {
   }
 
   /**
-   * Func to create stream with create stream SDK module
-   *
-   * @param {object} inliveApp api key
-   * @param {{ name: string; description: string; }} configObject stream title & desc
-   */
-  async createStream(inliveApp, configObject) {
-    // from SDK
-    const dataStream = await InliveStream.createStream(inliveApp, configObject);
-
-    if (dataStream.status.code === 200) {
-      window.location.replace('/live-stream/' + dataStream.data.id);
-    } else {
-      throw new Error('Failed to create broadcast');
-    }
-  }
-
-  /**
    * Func submit form
    *
-   * @param {{ preventDefault: () => void; }} e event
+   * @param {{ preventDefault: () => void; }} event event
    */
-  submit(e) {
-    e.preventDefault();
+  async submit(event) {
+    event.preventDefault();
     const form = this.renderRoot.querySelector('form[id="create-stream-form"]');
 
     const configObject = {
@@ -214,16 +196,14 @@ export class CreateStream extends LitElement {
       description: form ? form['description'].value || '' : ''
     };
 
-    // trial hard-code
-    let config = {
-      api_key: ''
-    };
+    const createStreamResponse = await fetchHttp({
+      url: '/api/stream/create',
+      method: 'POST',
+      body: configObject
+    }).catch((error) => alert('Failed to create stream: ' + error.message));
 
-    const inliveApp = InliveApp.init(config);
-
-    if (configObject.name !== undefined && configObject.name !== null) {
-      // trigger create function
-      this.createStream(inliveApp, configObject);
+    if (createStreamResponse.code === 200) {
+      return (window.location.href = `/streaming/studio/${createStreamResponse.data.id}`);
     }
   }
 
@@ -245,7 +225,7 @@ export class CreateStream extends LitElement {
                 ? html`<small class="error-text"
                     >Please input stream title</small
                   >`
-                : null}
+                : undefined}
             </div>
             <div class="description-container">
               <div class="stream-title">
