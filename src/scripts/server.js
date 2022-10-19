@@ -45,7 +45,6 @@ const createServer = async () => {
     .catch((error) => {
       console.log('Error starting server:', error);
       throw new Error(`Error starting server: ${error}`);
-      // process.exit(1);
     });
 };
 
