@@ -1,7 +1,7 @@
 import { LitElement, css, html } from 'lit';
 import { fetchHttp } from '../shared/modules/fetch-http.js';
 
-export class CreateStream extends LitElement {
+export class AppCreateStream extends LitElement {
   static get styles() {
     return css`
       * {
@@ -183,7 +183,7 @@ export class CreateStream extends LitElement {
   }
 
   /**
-   * Func submit form
+   * Func submit form to fetch using create stream
    *
    * @param {{ preventDefault: () => void; }} event event
    */
@@ -192,18 +192,20 @@ export class CreateStream extends LitElement {
     const form = this.renderRoot.querySelector('form[id="create-stream-form"]');
 
     const configObject = {
-      name: form ? this.hasValue(form['title'].value) : '',
-      description: form ? form['description'].value || '' : ''
+      name: this.hasValue(form['title'].value),
+      description: form['description'].value || ''
     };
 
-    const createStreamResponse = await fetchHttp({
-      url: '/api/stream/create',
-      method: 'POST',
-      body: configObject
-    }).catch((error) => alert('Failed to create stream: ' + error.message));
+    if (configObject.name) {
+      const createStreamResponse = await fetchHttp({
+        url: '/api/stream/create',
+        method: 'POST',
+        body: configObject
+      }).catch((error) => alert('Failed to create stream: ' + error.message));
 
-    if (createStreamResponse.code === 200) {
-      return (window.location.href = `/streaming/studio/${createStreamResponse.data.id}`);
+      if (createStreamResponse && createStreamResponse.code === 200) {
+        return (window.location.href = `/streaming/studio/${createStreamResponse.data.id}`);
+      }
     }
   }
 
@@ -252,4 +254,4 @@ export class CreateStream extends LitElement {
   }
 }
 
-window.customElements.define('create-stream', CreateStream);
+window.customElements.define('app-create-stream', AppCreateStream);

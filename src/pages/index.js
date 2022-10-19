@@ -1,12 +1,14 @@
 import { html } from 'lit';
 
 const LiveStream = () => {
-  return html`<create-stream id="create-stream-component"></create-stream>
+  return html`<app-create-stream
+      id="create-stream-component"
+    ></app-create-stream>
     <p id="error-warning"></p> `;
 };
 
 export const scripts = `
-<script type="module" src="/__client/features/streamer/create-stream.js"></script>
+<script type="module" src="/__client/features/streamer/app-create-stream.js"></script>
 <script>
 const username = prompt('input your username');
 const password = prompt('input your password');
