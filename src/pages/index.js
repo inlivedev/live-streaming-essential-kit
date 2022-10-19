@@ -55,7 +55,7 @@ const userAuthentication = async () => {
     document.getElementById('create-stream-component').style.display = 'none';
     document.getElementById('error-warning').style.display = 'block';
     document.getElementById('error-warning').style.textAlign = 'center';
-    document.getElementById('error-warning').innerHTML = authResponse.message;
+    document.getElementById('error-warning').innerHTML = authResponse.message + ': please input your valid username & password';
   };
 };
 
