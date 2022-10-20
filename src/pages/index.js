@@ -13,6 +13,29 @@ export const scripts = `
 const username = prompt('input your username');
 const password = prompt('input your password');
 
+const checkAuthValidation = async () => {
+  const response = await fetch('/api/auth/validation', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({})
+  });
+
+  const finalValidationResponse = await response.json();
+
+  // check if validation is success, if not success then render error message
+  if (finalValidationResponse.success) {
+    document.getElementById('create-stream-component').style.display = 'block';
+    document.getElementById('error-warning').style.display = 'none';
+  } else {
+    document.getElementById('create-stream-component').style.display = 'none';
+    document.getElementById('error-warning').style.display = 'block';
+    document.getElementById('error-warning').style.textAlign = 'center';
+    document.getElementById('error-warning').innerHTML = finalValidationResponse.message;
+  };
+};
+
 const userAuthentication = async () => {
   const response = await fetch('/api/auth/login-with-credentials', {
     method: 'POST',
@@ -29,8 +52,7 @@ const userAuthentication = async () => {
 
   // check if login is success, if not success then render error message
   if (authResponse.success) {
-    document.getElementById('create-stream-component').style.display = 'block';
-    document.getElementById('error-warning').style.display = 'none';
+    return checkAuthValidation();
   } else {
     document.getElementById('create-stream-component').style.display = 'none';
     document.getElementById('error-warning').style.display = 'block';
