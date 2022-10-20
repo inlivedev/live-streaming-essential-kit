@@ -7,7 +7,7 @@ export const validation = async (request) => {
     const verify = await request.jwtVerify();
 
     if (Date.now() / 1000 < Number.parseInt(verify.exp)) {
-      return false;
+      return true;
     }
     return false;
   } catch (error) {

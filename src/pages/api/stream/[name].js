@@ -6,7 +6,7 @@ const handler = async (request, reply) => {
   /**
    * call a function to validate user
    */
-  let validUser = await validation(request, reply);
+  let validUser = await validation(request);
 
   if (!validUser)
     reply.code(403).send({
