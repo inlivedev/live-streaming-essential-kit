@@ -1,13 +1,11 @@
 import { InliveApp } from '@inlivedev/inlive-js-sdk/app';
 import { InliveStream } from '@inlivedev/inlive-js-sdk/stream';
-import { validation } from '../auth/validation.js';
 
 const handler = async (request, reply) => {
   /**
-   * call a function to validate user
+   * using a temporary function to validate user
    */
-
-  const validUser = await validation(request);
+  let validUser = await validateUser(request, reply);
 
   if (!validUser)
     reply.code(403).send({
@@ -105,7 +103,7 @@ const handler = async (request, reply) => {
       const functionName = name + 'Stream';
 
       const configObject = {
-        stream_id: request.body.streamId
+        stream_id: request.body.stream_id
       };
 
       if (name === 'prepare') {
@@ -135,6 +133,21 @@ const handler = async (request, reply) => {
     } catch (err) {
       throw new Error(err);
     }
+  }
+};
+
+const validateUser = async (request, reply) => {
+  try {
+    const token = request?.headers?.cookie?.replace('token=', '');
+    if (!token) return false;
+
+    const verify = await request.jwtVerify();
+
+    if (Date.now() / 1000 < Number.parseInt(verify.exp)) {
+      return true;
+    }
+  } catch (err) {
+    throw new Error(err);
   }
 };
 
