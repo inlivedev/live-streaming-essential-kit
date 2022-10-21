@@ -77,7 +77,7 @@ export const fetchHttp = async (config = baseConfig) => {
   const response = await fetchHttpRequest(url, options);
   const json = await response.json();
 
-  return response.ok && json.code >= 200 && json.code < 300
+  return response.ok && response.status >= 200 && response.status < 300
     ? Promise.resolve(json)
     : Promise.reject(json);
 };
