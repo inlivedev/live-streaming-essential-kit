@@ -16,20 +16,6 @@ const handler = async (request, reply) => {
       data: undefined
     });
 
-  /**
-   * @typedef MediaConfig
-   * @property {string} videoSelector -
-   * @property {object} [videoOptions] - Video option fetch parameter
-   */
-
-  /**
-   * @type {MediaConfig}
-   */
-  const mediaConfig = {
-    videoSelector: 'video',
-    videoOptions: undefined
-  };
-
   const name = request?.params?.name;
 
   if (request.method !== 'POST') {
@@ -63,77 +49,160 @@ const handler = async (request, reply) => {
    */
   const inliveApp = InliveApp.init(config);
 
-  if (name === 'create') {
-    try {
-      let dataStream;
+  switch (name) {
+    case 'create': {
+      try {
+        let dataStream;
 
-      const configObject = {
-        name: request?.body?.name || '',
-        description: request?.body?.description
-          ? request?.body?.description || ''
-          : ''
-      };
+        const configObject = {
+          name: request?.body?.name || '',
+          description: request?.body?.description
+            ? request?.body?.description || ''
+            : ''
+        };
 
-      if (configObject.name !== undefined && configObject.name !== null) {
-        // trigger create function
-        dataStream = await InliveStream.createStream(inliveApp, configObject);
+        if (configObject.name !== undefined && configObject.name !== null) {
+          // trigger create function
+          dataStream = await InliveStream.createStream(inliveApp, configObject);
+        }
+
+        if (dataStream.status.code === 200) {
+          reply.code(200).send({
+            success: true,
+            code: dataStream.status.code,
+            message: dataStream.status.message,
+            data: dataStream.data
+          });
+        } else {
+          reply.code(dataStream.status.code).send({
+            success: false,
+            code: dataStream.status.code,
+            message: dataStream.status.message,
+            data: dataStream.data
+          });
+        }
+      } catch (error) {
+        throw new Error(error);
       }
 
-      if (dataStream.status.code === 200) {
-        reply.code(200).send({
-          success: true,
-          code: dataStream.status.code,
-          message: dataStream.status.message,
-          data: dataStream.data
-        });
-      } else {
-        reply.code(dataStream.status.code).send({
-          success: false,
-          code: dataStream.status.code,
-          message: dataStream.status.message,
-          data: dataStream.data
-        });
-      }
-    } catch (error) {
-      throw new Error(error);
+      break;
     }
-  } else if (name === 'prepare' || name === 'start' || name === 'end') {
-    try {
-      let dataStream;
+    case 'start':
+    case 'end': {
+      try {
+        let dataStream;
 
-      const functionName = name + 'Stream';
+        const functionName = name + 'Stream';
 
-      const configObject = {
-        stream_id: request.body.streamId
-      };
+        const configObject = {
+          stream_id: request.body.streamId
+        };
 
-      if (name === 'prepare') {
-        configObject.media = request?.body?.media || mediaConfig;
+        if (configObject.stream_id !== undefined) {
+          // trigger stream function
+          dataStream = await InliveStream[functionName](
+            inliveApp,
+            configObject
+          );
+        }
+
+        if (dataStream.status.code === 200) {
+          reply.code(200).send({
+            success: true,
+            code: dataStream.status.code,
+            message: dataStream.status.message,
+            data: dataStream.data
+          });
+        } else {
+          reply.code(dataStream.status.code).send({
+            success: false,
+            code: dataStream.status.code,
+            message: dataStream.status.message,
+            data: dataStream.data
+          });
+        }
+      } catch (error) {
+        throw new Error(error);
       }
 
-      if (configObject.stream_id !== undefined) {
-        // trigger stream function
-        dataStream = await InliveStream[functionName](inliveApp, configObject);
-      }
-
-      if (dataStream.status.code === 200) {
-        reply.code(200).send({
-          success: true,
-          code: dataStream.status.code,
-          message: dataStream.status.message,
-          data: dataStream.data
-        });
-      } else {
-        reply.code(dataStream.status.code).send({
-          success: false,
-          code: dataStream.status.code,
-          message: dataStream.status.message,
-          data: dataStream.data
-        });
-      }
-    } catch (error) {
-      throw new Error(error);
+      break;
     }
+    case 'prepare': {
+      try {
+        let dataStream;
+
+        const configObject = {
+          streamId: request.body.streamId
+        };
+
+        if (configObject.streamId !== undefined) {
+          // trigger stream function
+          dataStream = await InliveStream.prepareStream(
+            inliveApp,
+            configObject
+          );
+        }
+
+        if (dataStream.status.code === 200) {
+          reply.code(200).send({
+            success: true,
+            code: dataStream.status.code,
+            message: dataStream.status.message,
+            data: dataStream.data
+          });
+        } else {
+          reply.code(dataStream.status.code).send({
+            success: false,
+            code: dataStream.status.code,
+            message: dataStream.status.message,
+            data: dataStream.data
+          });
+        }
+      } catch (error) {
+        throw new Error(error);
+      }
+
+      break;
+    }
+    case 'init': {
+      try {
+        let dataStream;
+
+        const configObject = {
+          streamId: request.body.streamId,
+          sessionDescription: request.body.sessionDescription
+        };
+
+        if (
+          configObject.streamId !== undefined &&
+          configObject.sessionDescription !== undefined
+        ) {
+          // trigger stream function
+          dataStream = await InliveStream.initStream(inliveApp, configObject);
+        }
+
+        if (dataStream.status.code === 200) {
+          reply.code(200).send({
+            success: true,
+            code: dataStream.status.code,
+            message: dataStream.status.message,
+            data: dataStream.data
+          });
+        } else {
+          reply.code(dataStream.status.code).send({
+            success: false,
+            code: dataStream.status.code,
+            message: dataStream.status.message,
+            data: dataStream.data
+          });
+        }
+      } catch (error) {
+        throw new Error(error);
+      }
+
+      break;
+    }
+    // No default
   }
 };
 
