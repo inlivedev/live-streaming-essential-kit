@@ -74,8 +74,18 @@ export const fetchHttp = async (config = baseConfig) => {
     };
   }
 
+  /** @type {Response} */
   const response = await fetchHttpRequest(url, options);
-  const json = await response.json();
+  const contentType = response.headers.get('content-type');
+
+  let json = {};
+
+  if (contentType && contentType.includes('application/json')) {
+    json = await response.json();
+  } else {
+    const text = await response.text();
+    json = { data: text };
+  }
 
   return response.ok && response.status >= 200 && response.status < 300
     ? Promise.resolve(json)
