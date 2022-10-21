@@ -22,7 +22,8 @@ module.exports = {
     camelcase: ['error', { properties: 'always' }],
     eqeqeq: ['error', 'always'],
     'unicorn/prefer-ternary': ['error', 'only-single-line'],
-    'unicorn/template-indent': 'off'
+    'unicorn/template-indent': 'off',
+    'unicorn/prefer-node-protocol': 'off'
   },
   ignorePatterns: ['node_modules']
 };

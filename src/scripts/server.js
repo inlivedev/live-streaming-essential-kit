@@ -42,9 +42,9 @@ const createServer = async () => {
   fastify
     .listen({ port: PORT, host: '0.0.0.0' })
     .then((address) => console.log(`server listening on ${address}`))
-    .catch((err) => {
-      console.log('Error starting server:', err);
-      process.exit(1);
+    .catch((error) => {
+      console.log('Error starting server:', error);
+      throw new Error(`Error starting server: ${error}`);
     });
 };
 
