@@ -18,7 +18,7 @@ const handler = async (request, reply) => {
 
   const name = request?.params?.name;
 
-  if (request.method !== 'POST') {
+  if (request.method.toUpperCase() !== 'POST') {
     reply.code(400).send({
       success: false,
       code: 400,
