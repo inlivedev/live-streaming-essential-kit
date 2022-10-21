@@ -1,8 +1,16 @@
 import { InliveApp } from '@inlivedev/inlive-js-sdk/app';
 import { InliveStream } from '@inlivedev/inlive-js-sdk/stream';
-import { validation } from '../auth/validation.js';
+import { validation } from '../../../features/auth/validation.js';
 
 const handler = async (request, reply) => {
+  const name = request?.params?.name;
+
+  if (request.method.toUpperCase() !== 'POST') {
+    reply.code(400).send({
+      code: 400,
+      message: 'Method is not allowed'
+    });
+  }
   /**
    * call a function to validate user
    */
@@ -10,21 +18,9 @@ const handler = async (request, reply) => {
 
   if (!validUser)
     reply.code(403).send({
-      success: false,
       code: 403,
-      message: 'You are not authorized',
-      data: undefined
+      message: 'You are not authorized'
     });
-
-  const name = request?.params?.name;
-
-  if (request.method.toUpperCase() !== 'POST') {
-    reply.code(400).send({
-      success: false,
-      code: 400,
-      message: 'Method is not allowed'
-    });
-  }
 
   /**
    * @typedef Config
@@ -49,160 +45,72 @@ const handler = async (request, reply) => {
    */
   const inliveApp = InliveApp.init(config);
 
-  switch (name) {
-    case 'create': {
-      try {
-        let dataStream;
+  if (name === 'create') {
+    try {
+      let dataStream;
 
-        const configObject = {
-          name: request?.body?.name || '',
-          description: request?.body?.description
-            ? request?.body?.description || ''
-            : ''
-        };
+      const configObject = {
+        name: request?.body?.name || '',
+        description: request?.body?.description
+          ? request?.body?.description || ''
+          : ''
+      };
 
-        if (configObject.name !== undefined && configObject.name !== null) {
-          // trigger create function
-          dataStream = await InliveStream.createStream(inliveApp, configObject);
-        }
-
-        if (dataStream.status.code === 200) {
-          reply.code(200).send({
-            success: true,
-            code: dataStream.status.code,
-            message: dataStream.status.message,
-            data: dataStream.data
-          });
-        } else {
-          reply.code(dataStream.status.code).send({
-            success: false,
-            code: dataStream.status.code,
-            message: dataStream.status.message,
-            data: dataStream.data
-          });
-        }
-      } catch (error) {
-        throw new Error(error);
+      if (configObject.name !== undefined && configObject.name !== null) {
+        // trigger create function
+        dataStream = await InliveStream.createStream(inliveApp, configObject);
       }
 
-      break;
+      reply.code(dataStream.status.code).send(dataStream);
+    } catch (error) {
+      if (error instanceof SyntaxError) {
+        throw error;
+      }
     }
-    case 'start':
-    case 'end': {
-      try {
-        let dataStream;
+  } else if (name === 'prepare' || name === 'start' || name === 'end') {
+    try {
+      let dataStream;
 
-        const functionName = name + 'Stream';
+      const functionName = name + 'Stream';
 
-        const configObject = {
-          stream_id: request.body.streamId
-        };
+      const configObject = {
+        streamId: request.body.streamId
+      };
 
-        if (configObject.stream_id !== undefined) {
-          // trigger stream function
-          dataStream = await InliveStream[functionName](
-            inliveApp,
-            configObject
-          );
-        }
-
-        if (dataStream.status.code === 200) {
-          reply.code(200).send({
-            success: true,
-            code: dataStream.status.code,
-            message: dataStream.status.message,
-            data: dataStream.data
-          });
-        } else {
-          reply.code(dataStream.status.code).send({
-            success: false,
-            code: dataStream.status.code,
-            message: dataStream.status.message,
-            data: dataStream.data
-          });
-        }
-      } catch (error) {
-        throw new Error(error);
+      if (configObject.streamId !== undefined) {
+        // trigger stream function
+        dataStream = await InliveStream[functionName](inliveApp, configObject);
       }
 
-      break;
+      reply.code(dataStream.status.code).send(dataStream);
+    } catch (error) {
+      if (error instanceof SyntaxError) {
+        throw error;
+      }
     }
-    case 'prepare': {
-      try {
-        let dataStream;
+  } else if (name === 'init') {
+    try {
+      let dataStream;
 
-        const configObject = {
-          streamId: request.body.streamId
-        };
+      const configObject = {
+        streamId: request.body.streamId,
+        sessionDescription: request.body.sessionDescription
+      };
 
-        if (configObject.streamId !== undefined) {
-          // trigger stream function
-          dataStream = await InliveStream.prepareStream(
-            inliveApp,
-            configObject
-          );
-        }
-
-        if (dataStream.status.code === 200) {
-          reply.code(200).send({
-            success: true,
-            code: dataStream.status.code,
-            message: dataStream.status.message,
-            data: dataStream.data
-          });
-        } else {
-          reply.code(dataStream.status.code).send({
-            success: false,
-            code: dataStream.status.code,
-            message: dataStream.status.message,
-            data: dataStream.data
-          });
-        }
-      } catch (error) {
-        throw new Error(error);
+      if (
+        configObject.streamId !== undefined &&
+        configObject.sessionDescription !== undefined
+      ) {
+        // trigger stream function
+        dataStream = await InliveStream.initStream(inliveApp, configObject);
       }
 
-      break;
-    }
-    case 'init': {
-      try {
-        let dataStream;
-
-        const configObject = {
-          streamId: request.body.streamId,
-          sessionDescription: request.body.sessionDescription
-        };
-
-        if (
-          configObject.streamId !== undefined &&
-          configObject.sessionDescription !== undefined
-        ) {
-          // trigger stream function
-          dataStream = await InliveStream.initStream(inliveApp, configObject);
-        }
-
-        if (dataStream.status.code === 200) {
-          reply.code(200).send({
-            success: true,
-            code: dataStream.status.code,
-            message: dataStream.status.message,
-            data: dataStream.data
-          });
-        } else {
-          reply.code(dataStream.status.code).send({
-            success: false,
-            code: dataStream.status.code,
-            message: dataStream.status.message,
-            data: dataStream.data
-          });
-        }
-      } catch (error) {
-        throw new Error(error);
+      reply.code(dataStream.status.code).send(dataStream);
+    } catch (error) {
+      if (error instanceof SyntaxError) {
+        throw error;
       }
-
-      break;
     }
-    // No default
   }
 };
 
