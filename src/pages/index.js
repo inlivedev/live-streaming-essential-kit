@@ -44,9 +44,3 @@ userAuthentication();
 `;
 
 export default LiveStream;
-
-export const getServerSideProps = () => {
-  return {
-    props: {}
-  };
-};
