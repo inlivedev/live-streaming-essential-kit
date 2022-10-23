@@ -1,5 +1,6 @@
 import { LitElement } from 'lit';
 import { InliveStream } from '@inlivedev/inlive-js-sdk/stream';
+import { InliveEvent } from '@inlivedev/inlive-js-sdk/event';
 import { fetchHttp } from '../shared/modules/fetch-http.js';
 
 export class AppStreamCapturer extends LitElement {
@@ -67,6 +68,10 @@ export class AppStreamCapturer extends LitElement {
 
     const peerConnection = connection.getPeerConnection();
 
+    InliveEvent.subscribe('stream:end-event', () => {
+      connection.close();
+    });
+
     if (!this.preparedAt) {
       try {
         await fetchHttp({
@@ -78,6 +83,7 @@ export class AppStreamCapturer extends LitElement {
         });
       } catch (error) {
         console.error('Error on stream preparation', error);
+        alert('Failed to prepare a stream session');
       }
     } else {
       try {
@@ -89,7 +95,6 @@ export class AppStreamCapturer extends LitElement {
             sessionDescription: peerConnection.localDescription
           }
         });
-
         if (
           streamInitialization.status.code &&
           typeof streamInitialization.data === 'object'
@@ -99,6 +104,7 @@ export class AppStreamCapturer extends LitElement {
         }
       } catch (error) {
         console.error('Error on stream initialization', error);
+        alert('Failed to initialize a stream session');
       }
     }
   }
