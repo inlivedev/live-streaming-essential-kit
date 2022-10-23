@@ -163,6 +163,10 @@ export class AppStudio extends LitElement {
     if (this.startTime && this.endTime) {
       this.streamStatus = 'end';
     } else {
+      InliveEvent.subscribe('stream:ready-to-start-event', () => {
+        this.streamStatus = 'ready';
+      });
+
       InliveEvent.subscribe('stream:start-event', () => {
         this.streamStatus = 'live';
       });
