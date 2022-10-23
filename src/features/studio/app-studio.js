@@ -123,20 +123,42 @@ class AppStudio extends LitElement {
 
   static properties = {
     heading: { type: String },
-    description: { type: String }
+    description: { type: String },
+    streamId: { type: Number },
+    startTime: { type: String },
+    endTime: { type: String },
+    preparedAt: { type: String },
+    quality: { type: Number }
   };
 
   constructor() {
     super();
+    /** @type {string} */
     this.heading = '';
+    /** @type {string} */
     this.description = '';
+    /** @type {number | undefined} */
+    this.streamId = undefined;
+    /** @type {string | undefined} */
+    this.startTime = undefined;
+    /** @type {string | undefined} */
+    this.endTime = undefined;
+    /** @type {string | undefined} */
+    this.preparedAt = undefined;
+    /** @type {number | undefined} */
+    this.quality = undefined;
   }
 
   render() {
     return html`
       <div class="main-panel">
         <div class="video-panel">
-          <app-video-panel></app-video-panel>
+          <app-video-panel
+            streamId=${this.streamId}
+            startTime=${this.startTime}
+            endTime=${this.endTime}
+            preparedAt=${this.preparedAt}
+          ></app-video-panel>
         </div>
         <div class="information-panel">
           <app-information-panel
@@ -146,7 +168,7 @@ class AppStudio extends LitElement {
         </div>
         <div class="action-panel">
           <div class="action-panel-container">
-            <app-action-panel></app-action-panel>
+            <app-action-panel streamId=${this.streamId}></app-action-panel>
           </div>
         </div>
         <div class="activity-panel">
