@@ -33,6 +33,7 @@ const handler = async (request, reply) => {
    * @param {Config} config -- being passed from init module parameter
    */
   let config = {
+    // eslint-disable-next-line camelcase
     api_key: process.env.API_KEY
   };
 
@@ -45,71 +46,89 @@ const handler = async (request, reply) => {
    */
   const inliveApp = InliveApp.init(config);
 
-  if (name === 'create') {
-    try {
-      let dataStream;
+  switch (name) {
+    case 'create': {
+      try {
+        let dataStream;
 
-      const configObject = {
-        name: request?.body?.name || '',
-        description: request?.body?.description
-          ? request?.body?.description || ''
-          : ''
-      };
+        const configObject = {
+          name: request?.body?.name || '',
+          description: request?.body?.description
+            ? request?.body?.description || ''
+            : ''
+        };
 
-      if (configObject.name !== undefined && configObject.name !== null) {
-        // trigger create function
-        dataStream = await InliveStream.createStream(inliveApp, configObject);
+        if (configObject.name !== undefined && configObject.name !== null) {
+          // trigger create function
+          dataStream = await InliveStream.createStream(inliveApp, configObject);
+        }
+
+        reply.code(dataStream.status.code).send(dataStream);
+      } catch (error) {
+        if (error instanceof SyntaxError) {
+          throw error;
+        }
       }
 
-      reply.code(dataStream.status.code).send(dataStream);
-    } catch (error) {
-      if (error instanceof SyntaxError) {
-        throw error;
-      }
+      break;
     }
-  } else if (name === 'prepare' || name === 'start' || name === 'end') {
-    try {
-      let dataStream;
+    case 'prepare':
+    case 'start':
+    case 'end': {
+      try {
+        let dataStream;
 
-      const functionName = name + 'Stream';
+        const functionName = name + 'Stream';
 
-      const configObject = {
-        streamId: request.body.streamId
-      };
+        const configObject = {
+          streamId: request.body.streamId
+        };
 
-      if (configObject.streamId !== undefined) {
-        // trigger stream function
-        dataStream = await InliveStream[functionName](inliveApp, configObject);
+        if (configObject.streamId !== undefined) {
+          // trigger stream function
+          dataStream = await InliveStream[functionName](
+            inliveApp,
+            configObject
+          );
+        }
+
+        reply.code(dataStream.status.code).send(dataStream);
+      } catch (error) {
+        if (error instanceof SyntaxError) {
+          throw error;
+        }
       }
 
-      reply.code(dataStream.status.code).send(dataStream);
-    } catch (error) {
-      if (error instanceof SyntaxError) {
-        throw error;
-      }
+      break;
     }
-  } else if (name === 'init') {
-    try {
-      let dataStream;
+    case 'init': {
+      try {
+        let dataStream;
 
-      const configObject = {
-        streamId: request.body.streamId,
-        sessionDescription: request.body.sessionDescription
-      };
+        const configObject = {
+          streamId: request.body.streamId,
+          sessionDescription: request.body.sessionDescription
+        };
 
-      if (
-        configObject.streamId !== undefined &&
-        configObject.sessionDescription !== undefined
-      ) {
-        // trigger stream function
-        dataStream = await InliveStream.initStream(inliveApp, configObject);
+        if (
+          configObject.streamId !== undefined &&
+          configObject.sessionDescription !== undefined
+        ) {
+          // trigger stream function
+          dataStream = await InliveStream.initStream(inliveApp, configObject);
+        }
+
+        reply.code(dataStream.status.code).send(dataStream);
+      } catch (error) {
+        if (error instanceof SyntaxError) {
+          throw error;
+        }
       }
 
-      reply.code(dataStream.status.code).send(dataStream);
-    } catch (error) {
-      if (error instanceof SyntaxError) {
-        throw error;
-      }
+      break;
+    }
+    default: {
+      break;
     }
   }
 };
