@@ -37,13 +37,6 @@ const handler = async (request, reply) => {
     api_key: process.env.API_KEY
   };
 
-  /**
-   * Initialize an initialization instance
-   *
-   * @function
-   * @param {Config} config - A set of key/value parameter configuration
-   * @returns {object} InitializationInstance that contains config object of api_key
-   */
   const inliveApp = InliveApp.init(config);
 
   switch (name) {
