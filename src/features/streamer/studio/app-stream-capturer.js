@@ -1,6 +1,6 @@
 import { LitElement } from 'lit';
 import { InliveStream } from '@inlivedev/inlive-js-sdk/stream';
-import { fetchHttp } from '../shared/modules/fetch-http.js';
+import { fetchHttp } from '../../shared/modules/fetch-http.js';
 
 /**
  * @typedef {import('./app-studio.js').StreamStatusType} StreamStatusType

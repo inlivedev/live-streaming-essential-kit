@@ -27,7 +27,7 @@ const StudioStreamingPage = (properties) => {
 };
 
 export const scripts = `
-  <script type="module" src="/__client/features/studio/app-studio.js"></script>
+  <script type="module" src="/__client/features/streamer/studio/app-studio.js"></script>
 `;
 
 export default StudioStreamingPage;

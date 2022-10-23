@@ -1,6 +1,6 @@
 import { html, LitElement, css } from 'lit';
-import '../shared/ui/app-viewer-count.js';
-import '../shared/ui/app-lozenge.js';
+import '../../shared/ui/app-viewer-count.js';
+import '../../shared/ui/app-lozenge.js';
 
 class AppInformationPanel extends LitElement {
   static styles = css`

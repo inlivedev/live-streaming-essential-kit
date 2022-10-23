@@ -1,7 +1,7 @@
 import { css, html, LitElement } from 'lit';
 import './app-share-menu.js';
-import '../shared/ui/app-dropdown.js';
-import { fetchHttp } from '../shared/modules/fetch-http.js';
+import '../../shared/ui/app-dropdown.js';
+import { fetchHttp } from '../../shared/modules/fetch-http.js';
 
 /**
  * @typedef {import('./app-studio.js').StreamStatusType} StreamStatusType
