@@ -2,6 +2,10 @@ import { html, LitElement, css } from 'lit';
 import './app-stream-capturer.js';
 
 /**
+ * @typedef {import('./app-studio.js').StreamStatusType} StreamStatusType
+ */
+
+/**
  * @typedef {import('./app-stream-capturer.js').AppStreamCapturer} AppStreamCapturer
  */
 
@@ -41,6 +45,7 @@ export class AppVideoPanel extends LitElement {
       line-height: 1.5rem;
       padding: 1rem;
       box-sizing: border-box;
+      z-index: 10;
     }
 
     .video-ratio {
@@ -64,7 +69,8 @@ export class AppVideoPanel extends LitElement {
     endTime: { type: String },
     startTime: { type: String },
     streamId: { type: Number },
-    preparedAt: { type: String }
+    preparedAt: { type: String },
+    streamStatus: { type: String }
   };
 
   constructor() {
@@ -77,10 +83,14 @@ export class AppVideoPanel extends LitElement {
     this.streamId = undefined;
     /** @type {string | undefined} */
     this.preparedAt = undefined;
+    /** @type {StreamStatusType} */
+    this.streamStatus = 'preparing';
   }
 
   firstUpdated() {
-    this.attachVideoElement();
+    if (this.streamStatus !== 'end') {
+      this.attachVideoElement();
+    }
   }
 
   attachVideoElement() {
@@ -108,17 +118,24 @@ export class AppVideoPanel extends LitElement {
     return html`
       <app-stream-capturer
         streamId=${this.streamId}
-        startTime=${this.startTime}
-        endTime=${this.endTime}
         preparedAt=${this.preparedAt}
+        streamStatus=${this.streamStatus}
       ></app-stream-capturer>
       <div class="container">
         <div class="video-ratio">
-          ${this.startTime && this.endTime
+          ${this.streamStatus === 'preparing'
+            ? html`
+                <div class="video-placeholder">
+                  We're preparing the live stream for you. Please wait until the
+                  live stream is ready.
+                </div>
+              `
+            : this.streamStatus === 'end'
             ? html`
                 <div class="video-placeholder">The live stream has ended.</div>
               `
-            : html` <video class="video-element"></video> `}
+            : undefined}
+          <video class="video-element"></video>
         </div>
       </div>
     `;

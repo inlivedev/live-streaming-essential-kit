@@ -1,11 +1,10 @@
 import { css, html, LitElement } from 'lit';
-import { InliveEvent } from '@inlivedev/inlive-js-sdk/event';
 import './app-share-menu.js';
 import '../shared/ui/app-dropdown.js';
 import { fetchHttp } from '../shared/modules/fetch-http.js';
 
 /**
- * @typedef {'preparing' | 'connecting' | 'ready' | 'live' | 'end'} StreamStatusType
+ * @typedef {import('./app-studio.js').StreamStatusType} StreamStatusType
  */
 
 class AppActionPanel extends LitElement {
@@ -90,18 +89,6 @@ class AppActionPanel extends LitElement {
     this.streamId = undefined;
     /** @type {StreamStatusType} */
     this._streamStatus = 'preparing';
-  }
-
-  connectedCallback() {
-    super.connectedCallback();
-
-    InliveEvent.subscribe('stream:start-event', () => {
-      this.streamStatus = 'live';
-    });
-
-    InliveEvent.subscribe('stream:end-event', () => {
-      this.streamStatus = 'end';
-    });
   }
 
   /**

@@ -1,10 +1,15 @@
 import { html, css, LitElement } from 'lit';
+import { InliveEvent } from '@inlivedev/inlive-js-sdk/event';
 import './app-action-panel.js';
 import './app-video-panel.js';
 import './app-information-panel.js';
 import './app-activity-panel.js';
 
-class AppStudio extends LitElement {
+/**
+ * @typedef {'preparing' | 'connecting' | 'ready' | 'live' | 'end'} StreamStatusType
+ */
+
+export class AppStudio extends LitElement {
   static styles = css`
     * {
       margin: 0;
@@ -128,7 +133,8 @@ class AppStudio extends LitElement {
     startTime: { type: String },
     endTime: { type: String },
     preparedAt: { type: String },
-    quality: { type: Number }
+    quality: { type: Number },
+    streamStatus: { type: String }
   };
 
   constructor() {
@@ -147,6 +153,24 @@ class AppStudio extends LitElement {
     this.preparedAt = undefined;
     /** @type {number | undefined} */
     this.quality = undefined;
+    /** @type {StreamStatusType} */
+    this.streamStatus = 'preparing';
+  }
+
+  connectedCallback() {
+    super.connectedCallback();
+
+    if (this.startTime && this.endTime) {
+      this.streamStatus = 'end';
+    } else {
+      InliveEvent.subscribe('stream:start-event', () => {
+        this.streamStatus = 'live';
+      });
+
+      InliveEvent.subscribe('stream:end-event', () => {
+        this.streamStatus = 'end';
+      });
+    }
   }
 
   render() {
@@ -158,17 +182,22 @@ class AppStudio extends LitElement {
             startTime=${this.startTime}
             endTime=${this.endTime}
             preparedAt=${this.preparedAt}
+            streamStatus=${this.streamStatus}
           ></app-video-panel>
         </div>
         <div class="information-panel">
           <app-information-panel
             heading=${this.heading}
             description=${this.description}
+            streamStatus=${this.streamStatus}
           ></app-information-panel>
         </div>
         <div class="action-panel">
           <div class="action-panel-container">
-            <app-action-panel streamId=${this.streamId}></app-action-panel>
+            <app-action-panel
+              streamId=${this.streamId}
+              streamStatus=${this.streamStatus}
+            ></app-action-panel>
           </div>
         </div>
         <div class="activity-panel">

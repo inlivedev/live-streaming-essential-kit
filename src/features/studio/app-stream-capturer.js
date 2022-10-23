@@ -1,29 +1,39 @@
 import { LitElement } from 'lit';
 import { InliveStream } from '@inlivedev/inlive-js-sdk/stream';
-import { InliveEvent } from '@inlivedev/inlive-js-sdk/event';
 import { fetchHttp } from '../shared/modules/fetch-http.js';
+
+/**
+ * @typedef {import('./app-studio.js').StreamStatusType} StreamStatusType
+ */
+
+/**
+ * @typedef ConnectionType
+ * @property {Function} [close] - A method to close connection
+ * @property {Function} [connect] - A method to connect the connection with remote peer
+ * @property {Function} [getPeerConnection] - A method to check the current connection with peer
+ */
 
 export class AppStreamCapturer extends LitElement {
   static properties = {
-    endTime: { type: String },
-    startTime: { type: String },
     streamId: { type: Number },
     preparedAt: { type: String },
-    videoElement: { type: Object }
+    videoElement: { type: Object },
+    streamStatus: { type: String },
+    connection: { state: true }
   };
 
   constructor() {
     super();
-    /** @type {string | undefined} */
-    this.endTime = undefined;
-    /** @type {string | undefined} */
-    this.startTime = undefined;
     /** @type {number | undefined} */
     this.streamId = undefined;
     /** @type {string | undefined} */
     this.preparedAt = undefined;
     /** @type {object | undefined} */
     this.videoElement = undefined;
+    /** @type {StreamStatusType} */
+    this.streamStatus = 'preparing';
+    /** @type {ConnectionType} */
+    this.connection;
   }
 
   /**
@@ -31,8 +41,18 @@ export class AppStreamCapturer extends LitElement {
    * @param {import('lit').PropertyValues<any>} changedProperties - The component properties that change
    */
   firstUpdated(changedProperties) {
-    if (changedProperties.has('videoElement') && !this.endTime) {
+    if (changedProperties.has('videoElement') && this.streamStatus !== 'end') {
       this.initializeCapturer(this.videoElement);
+    }
+  }
+
+  /**
+   *
+   * @param {import('lit').PropertyValues<any>} changedProperties - The component properties that change
+   */
+  updated(changedProperties) {
+    if (changedProperties.has('streamStatus') && this.streamStatus === 'end') {
+      this.connection.close && this.connection.close();
     }
   }
 
@@ -60,17 +80,14 @@ export class AppStreamCapturer extends LitElement {
       mediaStream
     );
 
-    const connection = await InliveStream.connection.open({
+    this.connection = await InliveStream.connection.open({
       streamId: this.streamId,
       mediaStream,
       mediaElement
     });
 
-    const peerConnection = connection.getPeerConnection();
-
-    InliveEvent.subscribe('stream:end-event', () => {
-      connection.close();
-    });
+    const peerConnection =
+      this.connection.getPeerConnection && this.connection.getPeerConnection();
 
     if (!this.preparedAt) {
       try {
@@ -100,7 +117,8 @@ export class AppStreamCapturer extends LitElement {
           typeof streamInitialization.data === 'object'
         ) {
           const remoteSessionDescription = streamInitialization.data;
-          connection.connect(remoteSessionDescription);
+          this.connection.connect &&
+            this.connection.connect(remoteSessionDescription);
         }
       } catch (error) {
         console.error('Error on stream initialization', error);
