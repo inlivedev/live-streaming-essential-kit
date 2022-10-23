@@ -57,10 +57,7 @@ const handler = async (request, reply) => {
           : ''
       };
 
-      if (configObject.name !== undefined && configObject.name !== null) {
-        dataStream = await InliveStream.createStream(inliveApp, configObject);
-      }
-
+      dataStream = await InliveStream.createStream(inliveApp, configObject);
       reply.code(dataStream.status.code).send(dataStream);
       break;
     }
@@ -75,10 +72,7 @@ const handler = async (request, reply) => {
         streamId: request.body.streamId
       };
 
-      if (configObject.streamId !== undefined) {
-        dataStream = await InliveStream[functionName](inliveApp, configObject);
-      }
-
+      dataStream = await InliveStream[functionName](inliveApp, configObject);
       reply.code(dataStream.status.code).send(dataStream);
       break;
     }
@@ -90,13 +84,7 @@ const handler = async (request, reply) => {
         sessionDescription: request.body.sessionDescription
       };
 
-      if (
-        configObject.streamId !== undefined &&
-        configObject.sessionDescription !== undefined
-      ) {
-        dataStream = await InliveStream.initStream(inliveApp, configObject);
-      }
-
+      dataStream = await InliveStream.initStream(inliveApp, configObject);
       reply.code(dataStream.status.code).send(dataStream);
       break;
     }
