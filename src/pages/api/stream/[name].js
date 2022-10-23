@@ -3,7 +3,7 @@ import { InliveStream } from '@inlivedev/inlive-js-sdk/stream';
 import { validation } from '../../../features/auth/validation.js';
 
 const handler = async (request, reply) => {
-  const name = request?.params?.name;
+  const name = request.params?.name;
 
   if (request.method.toUpperCase() !== 'POST') {
     reply.code(400).send({
@@ -44,10 +44,8 @@ const handler = async (request, reply) => {
       let dataStream;
 
       const configObject = {
-        name: request?.body?.name || '',
-        description: request?.body?.description
-          ? request?.body?.description || ''
-          : ''
+        name: request.body?.name || '',
+        description: request.body?.description || ''
       };
 
       dataStream = await InliveStream.createStream(inliveApp, configObject);
