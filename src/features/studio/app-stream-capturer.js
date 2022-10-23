@@ -53,6 +53,11 @@ export class AppStreamCapturer extends LitElement {
   updated(changedProperties) {
     if (changedProperties.has('streamStatus') && this.streamStatus === 'end') {
       this.connection.close && this.connection.close();
+    } else if (
+      changedProperties.has('streamStatus') &&
+      this.streamStatus === 'ready'
+    ) {
+      this.handleStreamInitialization();
     }
   }
 
@@ -86,44 +91,52 @@ export class AppStreamCapturer extends LitElement {
       mediaElement
     });
 
+    if (!this.preparedAt) {
+      this.handleStreamPreparation();
+    } else {
+      this.handleStreamInitialization();
+    }
+  }
+
+  async handleStreamPreparation() {
+    try {
+      await fetchHttp({
+        url: `/api/stream/prepare`,
+        method: 'POST',
+        body: {
+          streamId: this.streamId
+        }
+      });
+    } catch (error) {
+      console.error('Error on stream preparation', error);
+      alert('Failed to prepare a stream session');
+    }
+  }
+
+  async handleStreamInitialization() {
     const peerConnection =
       this.connection.getPeerConnection && this.connection.getPeerConnection();
 
-    if (!this.preparedAt) {
-      try {
-        await fetchHttp({
-          url: `/api/stream/prepare`,
-          method: 'POST',
-          body: {
-            streamId: this.streamId
-          }
-        });
-      } catch (error) {
-        console.error('Error on stream preparation', error);
-        alert('Failed to prepare a stream session');
-      }
-    } else {
-      try {
-        const streamInitialization = await fetchHttp({
-          url: `/api/stream/init`,
-          method: 'POST',
-          body: {
-            streamId: this.streamId,
-            sessionDescription: peerConnection.localDescription
-          }
-        });
-        if (
-          streamInitialization.status.code &&
-          typeof streamInitialization.data === 'object'
-        ) {
-          const remoteSessionDescription = streamInitialization.data;
-          this.connection.connect &&
-            this.connection.connect(remoteSessionDescription);
+    try {
+      const streamInitialization = await fetchHttp({
+        url: `/api/stream/init`,
+        method: 'POST',
+        body: {
+          streamId: this.streamId,
+          sessionDescription: peerConnection.localDescription
         }
-      } catch (error) {
-        console.error('Error on stream initialization', error);
-        alert('Failed to initialize a stream session');
+      });
+      if (
+        streamInitialization.status.code &&
+        typeof streamInitialization.data === 'object'
+      ) {
+        const remoteSessionDescription = streamInitialization.data;
+        this.connection.connect &&
+          this.connection.connect(remoteSessionDescription);
       }
+    } catch (error) {
+      console.error('Error on stream initialization', error);
+      alert('Failed to initialize a stream session');
     }
   }
 }
