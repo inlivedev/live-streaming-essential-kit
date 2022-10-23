@@ -30,7 +30,7 @@ const handler = async (request, reply) => {
   /**
    * A variable to create object
    *
-   * @param {Config} config -- being passed from init module parameter
+   * @param {Config} config - being passed from init module parameter
    */
   let config = {
     // eslint-disable-next-line camelcase
