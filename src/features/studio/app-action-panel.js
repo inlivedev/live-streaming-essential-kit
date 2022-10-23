@@ -1,6 +1,11 @@
 import { css, html, LitElement } from 'lit';
 import './app-share-menu.js';
 import '../shared/ui/app-dropdown.js';
+import { fetchHttp } from '../shared/modules/fetch-http.js';
+
+/**
+ * @typedef {'preparing' | 'connecting' | 'ready' | 'live' | 'end'} StreamStatusType
+ */
 
 class AppActionPanel extends LitElement {
   static styles = css`
@@ -40,14 +45,21 @@ class AppActionPanel extends LitElement {
       cursor: pointer;
     }
 
-    .button-live {
+    .button-not-live {
       background-color: #2563eb;
       border: solid 1px #2563eb;
       color: #fff;
     }
 
-    .button-end {
+    .button-live {
       color: #dc2626;
+    }
+
+    .button-disabled {
+      border: solid 1px #93c5fd;
+      background-color: #93c5fd;
+      color: #fff;
+      cursor: default;
     }
 
     @media (min-width: 1024px) {
@@ -67,45 +79,111 @@ class AppActionPanel extends LitElement {
   `;
 
   static properties = {
+    streamId: { type: Number },
     streamStatus: { type: String }
   };
 
   constructor() {
     super();
-    this.streamStatus = '';
+    /** @type {number | undefined} */
+    this.streamId = undefined;
+    /** @type {StreamStatusType} */
+    this._streamStatus = 'preparing';
   }
 
-  handleLiveNow() {
-    //
+  /**
+   * Set the streamStatus and trigger update manually
+   */
+  set streamStatus(value) {
+    /**
+     * Prevent update this component when the status is connecting
+     */
+    if (value !== 'connecting') {
+      let oldValue = this._streamStatus;
+      this._streamStatus = value;
+      this.requestUpdate('streamStatus', oldValue);
+    }
   }
 
-  handleLiveEnd() {
-    //
+  /**
+   * Get the streamStatus value
+   *
+   * @returns {StreamStatusType} Returns the streamStatus value
+   */
+  get streamStatus() {
+    return this._streamStatus;
+  }
+
+  /**
+   * Handle to start a live streaming session
+   */
+  async handleLiveNow() {
+    if (this.streamStatus === 'ready') {
+      const streamStart = await fetchHttp({
+        url: '/api/stream/start',
+        method: 'POST',
+        body: {
+          streamId: this.streamId
+        }
+      });
+
+      if (streamStart.code === 200) {
+        this.streamStatus = 'live';
+      } else {
+        alert('Failed to start the live streaming');
+        console.error(streamStart);
+      }
+    }
+  }
+
+  /**
+   * Handle to end a live streaming session
+   */
+  async handleLiveEnd() {
+    if (this.streamStatus === 'live') {
+      const streamEnd = await fetchHttp({
+        url: '/api/stream/end',
+        method: 'POST',
+        body: {
+          streamId: this.streamId
+        }
+      });
+
+      if (streamEnd.code === 200) {
+        this.streamStatus = 'end';
+      } else {
+        alert('Failed to end the live streaming');
+        console.error(streamEnd);
+      }
+    }
   }
 
   render() {
     return html`
       <div class="action-panel">
-        ${this.streamStatus === 'live'
-          ? html`
-              <button
-                type="button"
-                class="button-text button-end"
-                @click=${this.handleLiveEnd}
-              >
-                End Live
-              </button>
-            `
-          : html`
-              <button
-                type="button"
-                class="button-text button-live"
-                @click=${this.handleLiveNow}
-              >
-                Live Now
-              </button>
-            `}
-
+        <button
+          type="button"
+          class=${`button-text ${
+            this.streamStatus === 'live' ? `button-live` : `button-not-live`
+          } ${
+            this.streamStatus !== 'ready' && this.streamStatus !== 'live'
+              ? `button-disabled`
+              : ``
+          }`}
+          ?disabled=${this.streamStatus !== 'ready' &&
+          this.streamStatus !== 'live'}
+          aria-disabled=${this.streamStatus !== 'ready' &&
+          this.streamStatus !== 'live'
+            ? true
+            : false}
+          @click=${this.streamStatus === 'ready'
+            ? this.handleLiveNow
+            : this.streamStatus === 'live'
+            ? this.handleLiveEnd
+            : undefined}
+        >
+          ${this.streamStatus === 'live' ? 'End Live' : 'Live Now'}
+        </button>
         <app-dropdown
           dropdownButtonId="share-dropdown-button"
           dropdownBodyId="share-dropdown-body"
@@ -131,7 +209,10 @@ class AppActionPanel extends LitElement {
             </svg>
           </button>
           <div slot="dropdown-body">
-            <app-share-menu streamUrl="" embedUrl=""></app-share-menu>
+            <app-share-menu
+              streamUrl=${`${window.location.origin}/streaming/watch/${this.streamId}`}
+              embedUrl=${`${window.location.origin}/streaming/embed/${this.streamId}`}
+            ></app-share-menu>
           </div>
         </app-dropdown>
       </div>
