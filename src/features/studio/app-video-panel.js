@@ -37,6 +37,7 @@ export class AppVideoPanel extends LitElement {
       top: 0;
       left: 0;
       color: white;
+      background-color: #121212;
       display: flex;
       align-items: center;
       justify-content: center;
