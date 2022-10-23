@@ -1,4 +1,5 @@
 import { css, html, LitElement } from 'lit';
+import { InliveEvent } from '@inlivedev/inlive-js-sdk/event';
 import './app-share-menu.js';
 import '../shared/ui/app-dropdown.js';
 import { fetchHttp } from '../shared/modules/fetch-http.js';
@@ -91,6 +92,18 @@ class AppActionPanel extends LitElement {
     this._streamStatus = 'preparing';
   }
 
+  connectedCallback() {
+    super.connectedCallback();
+
+    InliveEvent.subscribe('stream:start-event', () => {
+      this.streamStatus = 'live';
+    });
+
+    InliveEvent.subscribe('stream:end-event', () => {
+      this.streamStatus = 'end';
+    });
+  }
+
   /**
    * Set the streamStatus and trigger update manually
    */
@@ -119,19 +132,17 @@ class AppActionPanel extends LitElement {
    */
   async handleLiveNow() {
     if (this.streamStatus === 'ready') {
-      const streamStart = await fetchHttp({
-        url: '/api/stream/start',
-        method: 'POST',
-        body: {
-          streamId: this.streamId
-        }
-      });
-
-      if (streamStart.code === 200) {
-        this.streamStatus = 'live';
-      } else {
+      try {
+        await fetchHttp({
+          url: '/api/stream/start',
+          method: 'POST',
+          body: {
+            streamId: this.streamId
+          }
+        });
+      } catch (error) {
+        console.error(error);
         alert('Failed to start the live streaming');
-        console.error(streamStart);
       }
     }
   }
@@ -141,19 +152,17 @@ class AppActionPanel extends LitElement {
    */
   async handleLiveEnd() {
     if (this.streamStatus === 'live') {
-      const streamEnd = await fetchHttp({
-        url: '/api/stream/end',
-        method: 'POST',
-        body: {
-          streamId: this.streamId
-        }
-      });
-
-      if (streamEnd.code === 200) {
-        this.streamStatus = 'end';
-      } else {
+      try {
+        await fetchHttp({
+          url: '/api/stream/end',
+          method: 'POST',
+          body: {
+            streamId: this.streamId
+          }
+        });
+      } catch (error) {
+        console.error(error);
         alert('Failed to end the live streaming');
-        console.error(streamEnd);
       }
     }
   }
