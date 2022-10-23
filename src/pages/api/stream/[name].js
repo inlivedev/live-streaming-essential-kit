@@ -58,7 +58,6 @@ const handler = async (request, reply) => {
       };
 
       if (configObject.name !== undefined && configObject.name !== null) {
-        // trigger create function
         dataStream = await InliveStream.createStream(inliveApp, configObject);
       }
 
@@ -77,7 +76,6 @@ const handler = async (request, reply) => {
       };
 
       if (configObject.streamId !== undefined) {
-        // trigger stream function
         dataStream = await InliveStream[functionName](inliveApp, configObject);
       }
 
@@ -96,7 +94,6 @@ const handler = async (request, reply) => {
         configObject.streamId !== undefined &&
         configObject.sessionDescription !== undefined
       ) {
-        // trigger stream function
         dataStream = await InliveStream.initStream(inliveApp, configObject);
       }
 
