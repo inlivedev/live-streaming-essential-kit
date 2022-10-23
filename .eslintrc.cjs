@@ -24,7 +24,8 @@ module.exports = {
     'no-nested-ternary': 'off',
     'unicorn/prefer-ternary': ['error', 'only-single-line'],
     'unicorn/template-indent': 'off',
-    'unicorn/no-nested-ternary': 'off'
+    'unicorn/no-nested-ternary': 'off',
+    'unicorn/prefer-node-protocol': 'off'
   },
   ignorePatterns: ['node_modules']
 };
