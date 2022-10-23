@@ -2,10 +2,27 @@ import { html } from 'lit';
 import { InliveStream } from '@inlivedev/inlive-js-sdk/stream';
 
 const StudioStreamingPage = (properties) => {
-  const { heading, description } = properties;
+  const {
+    heading,
+    description,
+    streamId,
+    startTime,
+    endTime,
+    preparedAt,
+    quality
+  } = properties;
 
   return html`
-    <app-studio heading=${heading} description=${description}> </app-studio>
+    <app-studio
+      heading=${heading}
+      description=${description}
+      streamId=${streamId}
+      startTime=${startTime}
+      endTime=${endTime}
+      preparedAt=${preparedAt}
+      quality=${quality}
+    >
+    </app-studio>
   `;
 };
 
@@ -30,7 +47,11 @@ export const getServerSideProps = async (request) => {
     props: {
       heading: streamData.name || '',
       description: streamData.description || '',
-      streamId: streamData.id
+      streamId: streamData.id || undefined,
+      startTime: streamData.startTime || undefined,
+      endTime: streamData.endTime || undefined,
+      preparedAt: streamData.preparedAt || undefined,
+      quality: streamData.quality || undefined
     }
   };
 };
