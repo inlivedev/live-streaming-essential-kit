@@ -27,18 +27,19 @@ export default PreviewLiveStream;
 export const getServerSideProps = async (
   /** @type {{ params: { streamid: string; }; }} */ request
 ) => {
-  const streamId = Number.parseInt(request.params.streamid);
+  const streamId = Number.parseInt(request.params.streamid, 10);
+  const streamResponse = await InliveStream.getStream(streamId);
 
-  // use getStream module SDK
-  const streamData = await InliveStream.getStream(streamId);
+  let streamData = {};
+
+  if (streamResponse.status.code === 200 && streamResponse.data) {
+    streamData = streamResponse.data;
+  }
 
   // convert ISO time into DD longMonth YYYY - HH:MM Tmz
   let convertStartTimeStream;
-  if (
-    streamData.data.start_time !== null &&
-    streamData.data.start_time !== ''
-  ) {
-    const datetime = new Date(streamData.data.start_time);
+  if (streamData.startTime) {
+    const datetime = new Date(streamData.startTime);
 
     const date = new Intl.DateTimeFormat('id', {
       day: 'numeric',
@@ -55,29 +56,20 @@ export const getServerSideProps = async (
   }
 
   let streamStatus;
-  if (!streamData.data.start_time && !streamData.data.end_time) {
+  if (!streamData.startTime && !streamData.endTime) {
     streamStatus = 'streamScheduled';
-  } else if (
-    streamData.data.start_time !== null &&
-    streamData.data.end_time !== null &&
-    streamData.data.start_time !== '' &&
-    streamData.data.end_time !== ''
-  ) {
+  } else if (streamData.startTime && streamData.endTime) {
     streamStatus = 'streamEnded';
-  } else if (
-    streamData.data.start_time !== null &&
-    streamData.data.start_time !== '' &&
-    !streamData.data.end_time
-  ) {
+  } else if (streamData.startTime && !streamData.endTime) {
     streamStatus = 'streamLive';
   }
 
   return {
     props: {
-      streamTitle: streamData.data.name || '',
-      streamDescription: streamData.data.description || '',
+      streamTitle: streamData.name || '',
+      streamDescription: streamData.description || '',
       startTime: convertStartTimeStream || '',
-      streamId: streamId,
+      streamId: streamData.id,
       streamStatus: streamStatus
     }
   };
