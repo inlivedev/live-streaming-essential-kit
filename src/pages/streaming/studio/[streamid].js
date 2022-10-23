@@ -41,8 +41,6 @@ export const getServerSideProps = async (request) => {
     streamData = streamResponse.data;
   }
 
-  console.log('streamData', streamData);
-
   return {
     props: {
       heading: streamData.name || '',
