@@ -206,7 +206,7 @@ class AppActionPanel extends LitElement {
           </button>
           <div slot="dropdown-body">
             <app-share-menu
-              streamUrl=${`${window.location.origin}/streaming/watch/${this.streamId}`}
+              streamUrl=${`${window.location.origin}/streaming/preview/${this.streamId}`}
               embedUrl=${`${window.location.origin}/streaming/embed/${this.streamId}`}
             ></app-share-menu>
           </div>
