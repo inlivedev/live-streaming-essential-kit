@@ -1,5 +1,6 @@
 import { html } from 'lit';
 import { InliveStream } from '@inlivedev/inlive-js-sdk/stream';
+import { validation } from '../../../features/auth/validation.js';
 
 const StudioStreamingPage = (properties) => {
   const {
@@ -32,8 +33,17 @@ export const scripts = `
 
 export default StudioStreamingPage;
 
-export const getServerSideProps = async (request) => {
+export const getServerSideProps = async (request, reply) => {
   const streamId = Number.parseInt(request.params.streamid, 10);
+  const isAuthorized = await validation(request);
+
+  if (!isAuthorized) {
+    reply.code(403).send({
+      code: 403,
+      message: 'You are not authorized to see this page'
+    });
+  }
+
   const streamResponse = await InliveStream.getStream(streamId);
   let streamData = {};
 
