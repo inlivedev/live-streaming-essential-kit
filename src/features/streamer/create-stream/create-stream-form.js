@@ -208,7 +208,7 @@ export class CreateStreamForm extends LitElement {
         body: configObject
       }).catch((error) => alert('Failed to create stream: ' + error.message));
 
-      if (createStreamResponse && createStreamResponse.code === 200) {
+      if (createStreamResponse && createStreamResponse.status.code === 200) {
         window.location.href = `/streaming/studio/${createStreamResponse.data.id}`;
       }
     }
