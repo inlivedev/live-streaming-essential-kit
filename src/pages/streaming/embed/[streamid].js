@@ -1,25 +1,26 @@
 import { html } from 'lit';
 import { InliveStream } from '@inlivedev/inlive-js-sdk/stream';
 
-const WatchStreamingPage = (properties) => {
-  const { heading, description, hlsManifest, dashManifest } = properties;
+const EmbedStreamingPage = (properties) => {
+  const { hlsManifest, dashManifest } = properties;
 
   return html`
-    <app-viewer-room
-      heading=${heading}
-      description=${description}
-      hlsManifest=${hlsManifest}
-      dashManifest=${dashManifest}
-    >
-    </app-viewer-room>
+    <app-player
+      class="full-screen"
+      src=${hlsManifest}
+      dashUrl=${dashManifest}
+      hlsUrl=${hlsManifest}
+      autoplay
+      muted
+    ></app-player>
   `;
 };
 
 export const scripts = `
-  <script type="module" src="/__client/features/viewer/room/app-viewer-room.js"></script>
+  <script type="module" src="/__client/features/player/app-player.js"></script>
 `;
 
-export default WatchStreamingPage;
+export default EmbedStreamingPage;
 
 export const getServerSideProps = async (request) => {
   const streamId = Number.parseInt(request.params.streamid, 10);
@@ -32,8 +33,6 @@ export const getServerSideProps = async (request) => {
 
   return {
     props: {
-      heading: streamData.name || '',
-      description: streamData.description || '',
       hlsManifest: streamData.hlsManifestPath || '',
       dashManifest: streamData.dashManifestPath || ''
     }

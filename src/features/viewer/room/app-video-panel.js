@@ -12,7 +12,7 @@ class AppVideoPanel extends LitElement {
 
     .container {
       flex: 1;
-      background-color: #555;
+      background-color: #121212;
     }
 
     @media (min-width: 1024px) {
