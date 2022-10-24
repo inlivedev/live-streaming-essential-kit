@@ -1,5 +1,6 @@
 import { LitElement } from 'lit';
 import { InliveStream } from '@inlivedev/inlive-js-sdk/stream';
+import { InliveEvent } from '@inlivedev/inlive-js-sdk/event';
 import { fetchHttp } from '../../shared/modules/fetch-http.js';
 
 /**
@@ -36,6 +37,16 @@ export class AppStreamCapturer extends LitElement {
     this.connection;
   }
 
+  connectedCallback() {
+    super.connectedCallback();
+
+    if (this.streamStatus !== 'end') {
+      InliveEvent.subscribe('stream:ready-to-initialize-event', () => {
+        this.handleStreamInitialization();
+      });
+    }
+  }
+
   /**
    *
    * @param {import('lit').PropertyValues<any>} changedProperties - The component properties that change
@@ -53,11 +64,6 @@ export class AppStreamCapturer extends LitElement {
   updated(changedProperties) {
     if (changedProperties.has('streamStatus') && this.streamStatus === 'end') {
       this.connection.close && this.connection.close();
-    } else if (
-      changedProperties.has('streamStatus') &&
-      this.streamStatus === 'ready'
-    ) {
-      this.handleStreamInitialization();
     }
   }
 
@@ -108,8 +114,7 @@ export class AppStreamCapturer extends LitElement {
         }
       });
     } catch (error) {
-      console.error('Error on stream preparation', error);
-      alert('Failed to prepare a stream session');
+      console.error(error);
     }
   }
 
