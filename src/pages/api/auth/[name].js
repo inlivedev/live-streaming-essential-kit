@@ -1,7 +1,7 @@
 const handler = async (request, reply) => {
   const name = request?.params?.name;
 
-  if (request.method !== 'POST') {
+  if (request.method.toUpperCase() !== 'POST') {
     reply.code(400).send({
       success: false,
       code: 400,
@@ -30,19 +30,6 @@ const handler = async (request, reply) => {
       });
 
       reply.code(200).send({ success: true });
-    } catch (error) {
-      throw new Error(error);
-    }
-  } else if (name === 'validation') {
-    try {
-      const token = request?.headers?.cookie?.replace('token=', '');
-      if (!token) reply.code(401).send({ message: 'You are not authorize' });
-
-      const verify = await request.jwtVerify();
-
-      if (Date.now() / 1000 < Number.parseInt(verify.exp)) {
-        reply.code(200).send({ success: true });
-      }
     } catch (error) {
       throw new Error(error);
     }
