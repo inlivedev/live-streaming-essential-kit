@@ -2,7 +2,11 @@ import { html, LitElement, css } from 'lit';
 import '../../shared/ui/app-viewer-count.js';
 import '../../shared/ui/app-lozenge.js';
 
-class AppInformationPanel extends LitElement {
+/**
+ * @typedef {import('./app-viewer-room.js').StreamStatusType} StreamStatusType
+ */
+
+export class AppInformationPanel extends LitElement {
   static styles = css`
     * {
       margin: 0;
@@ -39,9 +43,14 @@ class AppInformationPanel extends LitElement {
       margin-top: 0.25rem;
     }
 
-    .lozenge-live-status {
+    .lozenge-wrapper {
       display: flex;
       column-gap: 0.25rem;
+    }
+
+    .lozenge-upcoming {
+      --background-color: #dbeafe;
+      --color: #1e40af;
     }
 
     .lozenge-live {
@@ -85,13 +94,18 @@ class AppInformationPanel extends LitElement {
 
   static properties = {
     heading: { type: String },
-    description: { type: String }
+    description: { type: String },
+    streamStatus: { type: String }
   };
 
   constructor() {
     super();
+    /** @type {string} */
     this.heading = '';
+    /** @type {string} */
     this.description = '';
+    /** @type {StreamStatusType} */
+    this.streamStatus = 'upcoming';
   }
 
   render() {
@@ -102,10 +116,23 @@ class AppInformationPanel extends LitElement {
           ? html` <p class="description">${this.description}</p> `
           : undefined}
         <div class="status-panel">
-          <div class="lozenge-live-status">
-            <app-lozenge class="lozenge-live">LIVE</app-lozenge>
-            <app-lozenge>00:12:34</app-lozenge>
-          </div>
+          ${this.streamStatus === 'live'
+            ? html`
+                <div class="lozenge-wrapper">
+                  <app-lozenge class="lozenge-live">LIVE</app-lozenge>
+                  <app-lozenge>00:00:00</app-lozenge>
+                </div>
+              `
+            : this.streamStatus === 'end'
+            ? html`
+                <div class="lozenge-wrapper">
+                  <app-lozenge class="lozenge-ended">Live Ended</app-lozenge>
+                  <app-lozenge>00:30:00</app-lozenge>
+                </div>
+              `
+            : html`
+                <app-lozenge class="lozenge-upcoming">Upcoming</app-lozenge>
+              `}
           <app-viewer-count></app-viewer-count>
         </div>
       </div>

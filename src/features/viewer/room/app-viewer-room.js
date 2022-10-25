@@ -3,7 +3,11 @@ import './app-video-panel.js';
 import './app-information-panel.js';
 import './app-activity-panel.js';
 
-class AppViewerRoom extends LitElement {
+/**
+ * @typedef {'upcoming' | 'live' | 'end'} StreamStatusType
+ */
+
+export class AppViewerRoom extends LitElement {
   static styles = css`
     .main-panel {
       position: relative;
@@ -91,15 +95,36 @@ class AppViewerRoom extends LitElement {
     heading: { type: String },
     description: { type: String },
     hlsManifest: { type: String },
-    dashManifest: { type: String }
+    dashManifest: { type: String },
+    startTime: { type: String },
+    endTime: { type: String }
   };
 
   constructor() {
     super();
+    /** @type {string} */
     this.heading = '';
+    /** @type {string} */
     this.description = '';
+    /** @type {string} */
     this.hlsManifest = '';
+    /** @type {string} */
     this.dashManifest = '';
+    /** @type {string} */
+    this.startTime = '';
+    /** @type {string} */
+    this.endTime = '';
+    /** @type {StreamStatusType} */
+    this.streamStatus = 'upcoming';
+  }
+
+  connectedCallback() {
+    super.connectedCallback();
+    if (this.startTime && !this.endTime) {
+      this.streamStatus = 'live';
+    } else if (this.startTime && this.endTime) {
+      this.streamStatus = 'end';
+    }
   }
 
   render() {
@@ -115,6 +140,7 @@ class AppViewerRoom extends LitElement {
           <app-information-panel
             heading=${this.heading}
             description=${this.description}
+            streamStatus=${this.streamStatus}
           ></app-information-panel>
         </div>
         <div class="activity-panel">
