@@ -2,7 +2,11 @@ import { html, LitElement, css } from 'lit';
 import '../../shared/ui/app-viewer-count.js';
 import '../../shared/ui/app-lozenge.js';
 
-class AppInformationPanel extends LitElement {
+/**
+ * @typedef {import('./app-studio.js').StreamStatusType} StreamStatusType
+ */
+
+export class AppInformationPanel extends LitElement {
   static styles = css`
     * {
       margin: 0;
@@ -33,9 +37,24 @@ class AppInformationPanel extends LitElement {
       margin-top: 0.25rem;
     }
 
-    .lozenge-live-status {
+    .lozenge-wrapper {
       display: flex;
       column-gap: 0.25rem;
+    }
+
+    .lozenge-preparing {
+      --background-color: #fef3c7;
+      --color: #92400e;
+    }
+
+    .lozenge-connecting {
+      --background-color: #fef3c7;
+      --color: #92400e;
+    }
+
+    .lozenge-ready {
+      --background-color: #d1fae5;
+      --color: #065f46;
     }
 
     .lozenge-live {
@@ -79,13 +98,18 @@ class AppInformationPanel extends LitElement {
 
   static properties = {
     heading: { type: String },
-    description: { type: String }
+    description: { type: String },
+    streamStatus: { type: String }
   };
 
   constructor() {
     super();
+    /** @type {string} */
     this.heading = '';
+    /** @type {string} */
     this.description = '';
+    /** @type {StreamStatusType} */
+    this.streamStatus = 'preparing';
   }
 
   render() {
@@ -96,10 +120,35 @@ class AppInformationPanel extends LitElement {
           ? html` <p class="description">${this.description}</p> `
           : undefined}
         <div class="status-panel">
-          <div class="lozenge-live-status">
-            <app-lozenge class="lozenge-live">LIVE</app-lozenge>
-            <app-lozenge>00:12:34</app-lozenge>
-          </div>
+          ${this.streamStatus === 'preparing'
+            ? html`
+                <app-lozenge class="lozenge-preparing">
+                  Preparing...
+                </app-lozenge>
+              `
+            : this.streamStatus === 'ready'
+            ? html`
+                <app-lozenge class="lozenge-ready">Ready to Live</app-lozenge>
+              `
+            : this.streamStatus === 'live'
+            ? html`
+                <div class="lozenge-wrapper">
+                  <app-lozenge class="lozenge-live">LIVE</app-lozenge>
+                  <app-lozenge>00:00:00</app-lozenge>
+                </div>
+              `
+            : this.streamStatus === 'end'
+            ? html`
+                <div class="lozenge-wrapper">
+                  <app-lozenge class="lozenge-ended">Live Ended</app-lozenge>
+                  <app-lozenge>00:30:00</app-lozenge>
+                </div>
+              `
+            : html`
+                <app-lozenge class="lozenge-connecting">
+                  Connecting...
+                </app-lozenge>
+              `}
           <app-viewer-count></app-viewer-count>
         </div>
       </div>
