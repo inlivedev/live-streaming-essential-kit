@@ -35,7 +35,9 @@ export const getServerSideProps = async (request) => {
       heading: streamData.name || '',
       description: streamData.description || '',
       hlsManifest: streamData.hlsManifestPath || '',
-      dashManifest: streamData.dashManifestPath || ''
+      dashManifest: streamData.dashManifestPath || '',
+      startTime: streamData.startTime || '',
+      endTime: streamData.endTime || ''
     }
   };
 };

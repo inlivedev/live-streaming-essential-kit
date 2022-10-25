@@ -55,11 +55,11 @@ export const getServerSideProps = async (request, reply) => {
     props: {
       heading: streamData.name || '',
       description: streamData.description || '',
-      streamId: streamData.id,
-      startTime: streamData.startTime,
-      endTime: streamData.endTime,
-      preparedAt: streamData.preparedAt,
-      quality: streamData.quality
+      streamId: streamData.id || undefined,
+      startTime: streamData.startTime || '',
+      endTime: streamData.endTime || '',
+      preparedAt: streamData.preparedAt || '',
+      quality: streamData.quality || undefined
     }
   };
 };

@@ -145,12 +145,12 @@ export class AppStudio extends LitElement {
     this.description = '';
     /** @type {number | undefined} */
     this.streamId = undefined;
-    /** @type {string | undefined} */
-    this.startTime = undefined;
-    /** @type {string | undefined} */
-    this.endTime = undefined;
-    /** @type {string | undefined} */
-    this.preparedAt = undefined;
+    /** @type {string} */
+    this.startTime = '';
+    /** @type {string} */
+    this.endTime = '';
+    /** @type {string} */
+    this.preparedAt = '';
     /** @type {number | undefined} */
     this.quality = undefined;
     /** @type {StreamStatusType} */

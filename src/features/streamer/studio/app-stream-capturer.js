@@ -63,7 +63,7 @@ export class AppStreamCapturer extends LitElement {
    */
   updated(changedProperties) {
     if (changedProperties.has('streamStatus') && this.streamStatus === 'end') {
-      this.connection.close && this.connection.close();
+      !this.connection || !this.connection.close || this.connection.close();
     }
   }
 
