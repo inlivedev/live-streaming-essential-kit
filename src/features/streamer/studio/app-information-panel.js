@@ -2,6 +2,7 @@ import { html, LitElement, css } from 'lit';
 import '../../shared/ui/app-viewer-count.js';
 import '../../shared/ui/app-lozenge.js';
 import '../../shared/ui/app-timer-counter.js';
+import { handleTimer } from '../../shared/modules/handle-timer.js';
 
 /**
  * @typedef {import('./app-studio.js').StreamStatusType} StreamStatusType
@@ -125,26 +126,14 @@ export class AppInformationPanel extends LitElement {
   updated(changedProperties) {
     //check for the streamState changes
     if (changedProperties.has('streamStatus')) {
-      this.handleTimer();
-    }
-  }
-
-  handleTimer() {
-    const appTimerCounter = this.renderRoot.querySelector('app-timer-counter');
-
-    if (this.streamStatus === 'live' && appTimerCounter) {
-      //we don't need start time param when the stream is just started to live
-      appTimerCounter.handleStartTimer();
-    } else if (this.streamStatus === 'end' && appTimerCounter) {
-      appTimerCounter.handleEndTimer();
-
-      //when loaded on first time, if the stream has already ended, will get the previous stream duration
-      if (this.startTime && this.endTime) {
-        const startTime = new Date(this.startTime).getTime();
-        const endTime = new Date(this.endTime).getTime();
-        const substractTime = endTime - startTime;
-        appTimerCounter.handleFormatTime(substractTime);
-      }
+      const appTimerCounter =
+        this.renderRoot.querySelector('app-timer-counter');
+      handleTimer(
+        appTimerCounter,
+        this.streamStatus,
+        this.startTime,
+        this.endTime
+      );
     }
   }
 
