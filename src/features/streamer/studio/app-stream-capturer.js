@@ -98,7 +98,7 @@ export class AppStreamCapturer extends LitElement {
     });
 
     if (!this.preparedAt) {
-      // this.handleStreamPreparation();
+      this.handleStreamPreparation();
     } else {
       this.handleStreamInitialization();
     }
