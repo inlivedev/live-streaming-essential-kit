@@ -121,7 +121,6 @@ export class AppViewerRoom extends LitElement {
 
   connectedCallback() {
     super.connectedCallback();
-    console.log('cek dpn end time', this.endTime);
     if (this.startTime && !this.endTime) {
       this.streamStatus = 'live';
     } else if (this.startTime && this.endTime) {
