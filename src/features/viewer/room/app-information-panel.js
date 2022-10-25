@@ -112,15 +112,18 @@ export class AppInformationPanel extends LitElement {
     /** @type {string} */
     this.description = '';
     /** @type {StreamStatusType} */
-    this.streamStatus = 'preparing';
+    this.streamStatus = 'upcoming';
     /** @type {string | undefined} */
     this.endTime = undefined;
     /** @type {string | undefined} */
     this.startTime = undefined;
   }
 
+  /**
+   * @param {{ has: (arg0: string) => any; }} changedProperties changed properties names
+   */
   updated(changedProperties) {
-    //check for the streamState changes from handleStreamState method
+    //check for the streamState changes
     if (changedProperties.has('streamStatus')) {
       this.handleTimer();
     }
@@ -128,11 +131,9 @@ export class AppInformationPanel extends LitElement {
 
   handleTimer() {
     const appTimerCounter = this.renderRoot.querySelector('app-timer-counter');
-    console.log('tes viewer', appTimerCounter.handleStartTimer());
-    console.log('cek status viewer', this.streamStatus);
 
     if (this.streamStatus === 'live' && appTimerCounter) {
-      //when the stream is live but the user accidentally reload the page, the timer will get the time when the stream started
+      //when the stream is live but the user just reload the page, the timer will get the time when the stream started
       if (this.startTime) {
         const startTime = new Date(this.startTime).getTime();
         appTimerCounter.handleStartTimer(startTime);
@@ -148,6 +149,14 @@ export class AppInformationPanel extends LitElement {
         const startTime = new Date(this.startTime).getTime();
         const endTime = new Date(this.endTime).getTime();
         const substractTime = endTime - startTime;
+        appTimerCounter.handleFormatTime(substractTime);
+      }
+
+      //when loaded on first time, if the stream hasn't ended yet (still on going), will get the stream duration up until now
+      if (this.startTime && !this.endTime) {
+        const startTime = new Date(this.startTime).getTime();
+        const timeNow = Date.now();
+        const substractTime = timeNow - startTime;
         appTimerCounter.handleFormatTime(substractTime);
       }
     }

@@ -119,33 +119,27 @@ export class AppInformationPanel extends LitElement {
     this.startTime = undefined;
   }
 
+  /**
+   * @param {{ has: (arg0: string) => any; }} changedProperties changed properties name
+   */
   updated(changedProperties) {
-    //check for the streamState changes from handleStreamState method
+    //check for the streamState changes
     if (changedProperties.has('streamStatus')) {
       this.handleTimer();
     }
   }
 
   handleTimer() {
-    console.log('start', this.startTime);
-    console.log('end', this.endTime);
     const appTimerCounter = this.renderRoot.querySelector('app-timer-counter');
 
     if (this.streamStatus === 'live' && appTimerCounter) {
-      //when the stream is live but the user accidentally reload the page, the timer will get the time when the stream started
-      if (this.startTime) {
-        const startTime = new Date(this.startTime).getTime();
-        appTimerCounter.handleStartTimer(startTime);
-      } else {
-        //we don't need start time param when the stream is just started to live
-        appTimerCounter.handleStartTimer();
-      }
+      //we don't need start time param when the stream is just started to live
+      appTimerCounter.handleStartTimer();
     } else if (this.streamStatus === 'end' && appTimerCounter) {
       appTimerCounter.handleEndTimer();
 
       //when loaded on first time, if the stream has already ended, will get the previous stream duration
       if (this.startTime && this.endTime) {
-        console.log('ada start & end time');
         const startTime = new Date(this.startTime).getTime();
         const endTime = new Date(this.endTime).getTime();
         const substractTime = endTime - startTime;

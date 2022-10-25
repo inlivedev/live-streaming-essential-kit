@@ -42,8 +42,8 @@ class AppTimerCounter extends LitElement {
   }
 
   /**
-   * @param {any} timestamp time stamp
-   * @returns {any} formatTime
+   * @param {number} timestamp time stamp
+   * @returns {string} format time in hh:mm:ss
    */
   handleFormatTime(timestamp) {
     let hours = Math.floor(

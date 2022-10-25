@@ -1,5 +1,4 @@
 import { css, html, LitElement } from 'lit';
-import { InliveEvent } from '@inlivedev/inlive-js-sdk/event';
 import './app-video-panel.js';
 import './app-information-panel.js';
 import './app-activity-panel.js';
@@ -122,6 +121,7 @@ export class AppViewerRoom extends LitElement {
 
   connectedCallback() {
     super.connectedCallback();
+    console.log('cek dpn end time', this.endTime);
     if (this.startTime && !this.endTime) {
       this.streamStatus = 'live';
     } else if (this.startTime && this.endTime) {
