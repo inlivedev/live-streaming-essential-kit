@@ -1,5 +1,5 @@
 import { html } from 'lit';
-import { InliveStream } from '@inlivedev/inlive-js-sdk/stream';
+import { InliveStream } from '@inlivedev/inlive-js-sdk-test/stream';
 import { validation } from '../../../features/auth/validation.js';
 
 const StudioStreamingPage = (properties) => {

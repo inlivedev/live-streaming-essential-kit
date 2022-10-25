@@ -1,6 +1,11 @@
 import { html, LitElement, css } from 'lit';
 import '../../shared/ui/app-viewer-count.js';
 import '../../shared/ui/app-lozenge.js';
+import '../../shared/ui/app-timer-counter.js';
+
+/**
+ * @typedef {import('./app-viewer-room.js').StreamStatusType} StreamStatusType
+ */
 
 /**
  * @typedef {import('./app-viewer-room.js').StreamStatusType} StreamStatusType
@@ -95,7 +100,9 @@ export class AppInformationPanel extends LitElement {
   static properties = {
     heading: { type: String },
     description: { type: String },
-    streamStatus: { type: String }
+    streamStatus: { type: String },
+    endTime: { type: String },
+    startTime: { type: String }
   };
 
   constructor() {
@@ -105,7 +112,45 @@ export class AppInformationPanel extends LitElement {
     /** @type {string} */
     this.description = '';
     /** @type {StreamStatusType} */
-    this.streamStatus = 'upcoming';
+    this.streamStatus = 'preparing';
+    /** @type {string | undefined} */
+    this.endTime = undefined;
+    /** @type {string | undefined} */
+    this.startTime = undefined;
+  }
+
+  updated(changedProperties) {
+    //check for the streamState changes from handleStreamState method
+    if (changedProperties.has('streamStatus')) {
+      this.handleTimer();
+    }
+  }
+
+  handleTimer() {
+    const appTimerCounter = this.renderRoot.querySelector('app-timer-counter');
+    console.log('tes viewer', appTimerCounter.handleStartTimer());
+    console.log('cek status viewer', this.streamStatus);
+
+    if (this.streamStatus === 'live' && appTimerCounter) {
+      //when the stream is live but the user accidentally reload the page, the timer will get the time when the stream started
+      if (this.startTime) {
+        const startTime = new Date(this.startTime).getTime();
+        appTimerCounter.handleStartTimer(startTime);
+      } else {
+        //we don't need start time param when the stream is just started to live
+        appTimerCounter.handleStartTimer();
+      }
+    } else if (this.streamStatus === 'end' && appTimerCounter) {
+      appTimerCounter.handleEndTimer();
+
+      //when loaded on first time, if the stream has already ended, will get the previous stream duration
+      if (this.startTime && this.endTime) {
+        const startTime = new Date(this.startTime).getTime();
+        const endTime = new Date(this.endTime).getTime();
+        const substractTime = endTime - startTime;
+        appTimerCounter.handleFormatTime(substractTime);
+      }
+    }
   }
 
   render() {
@@ -120,14 +165,18 @@ export class AppInformationPanel extends LitElement {
             ? html`
                 <div class="lozenge-wrapper">
                   <app-lozenge class="lozenge-live">LIVE</app-lozenge>
-                  <app-lozenge>00:00:00</app-lozenge>
+                  <app-lozenge
+                    ><app-timer-counter></app-timer-counter
+                  ></app-lozenge>
                 </div>
               `
             : this.streamStatus === 'end'
             ? html`
                 <div class="lozenge-wrapper">
                   <app-lozenge class="lozenge-ended">Live Ended</app-lozenge>
-                  <app-lozenge>00:30:00</app-lozenge>
+                  <app-lozenge
+                    ><app-timer-counter></app-timer-counter
+                  ></app-lozenge>
                 </div>
               `
             : html`

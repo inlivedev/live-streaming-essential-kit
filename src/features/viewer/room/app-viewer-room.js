@@ -1,4 +1,5 @@
 import { css, html, LitElement } from 'lit';
+import { InliveEvent } from '@inlivedev/inlive-js-sdk/event';
 import './app-video-panel.js';
 import './app-information-panel.js';
 import './app-activity-panel.js';
@@ -97,7 +98,8 @@ export class AppViewerRoom extends LitElement {
     hlsManifest: { type: String },
     dashManifest: { type: String },
     startTime: { type: String },
-    endTime: { type: String }
+    endTime: { type: String },
+    streamStatus: { type: String }
   };
 
   constructor() {
@@ -141,6 +143,8 @@ export class AppViewerRoom extends LitElement {
             heading=${this.heading}
             description=${this.description}
             streamStatus=${this.streamStatus}
+            startTime=${this.startTime}
+            endTime=${this.endTime}
           ></app-information-panel>
         </div>
         <div class="activity-panel">
