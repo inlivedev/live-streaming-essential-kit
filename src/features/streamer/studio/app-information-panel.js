@@ -127,9 +127,9 @@ export class AppInformationPanel extends LitElement {
   }
 
   handleTimer() {
+    console.log('start', this.startTime);
+    console.log('end', this.endTime);
     const appTimerCounter = this.renderRoot.querySelector('app-timer-counter');
-    console.log('tes', appTimerCounter.handleStartTimer());
-    console.log('cek status', this.streamStatus);
 
     if (this.streamStatus === 'live' && appTimerCounter) {
       //when the stream is live but the user accidentally reload the page, the timer will get the time when the stream started
@@ -145,6 +145,7 @@ export class AppInformationPanel extends LitElement {
 
       //when loaded on first time, if the stream has already ended, will get the previous stream duration
       if (this.startTime && this.endTime) {
+        console.log('ada start & end time');
         const startTime = new Date(this.startTime).getTime();
         const endTime = new Date(this.endTime).getTime();
         const substractTime = endTime - startTime;
@@ -171,22 +172,21 @@ export class AppInformationPanel extends LitElement {
             ? html`
                 <app-lozenge class="lozenge-ready">Ready to Live</app-lozenge>
               `
-            : this.streamStatus === 'live'
+            : this.streamStatus === 'live' || this.streamStatus === 'end'
             ? html`
                 <div class="lozenge-wrapper">
-                  <app-lozenge class="lozenge-live">LIVE</app-lozenge>
-                  <app-lozenge
-                    ><app-timer-counter></app-timer-counter
-                  ></app-lozenge>
-                </div>
-              `
-            : this.streamStatus === 'end'
-            ? html`
-                <div class="lozenge-wrapper">
-                  <app-lozenge class="lozenge-ended">Live Ended</app-lozenge>
-                  <app-lozenge
-                    ><app-timer-counter></app-timer-counter
-                  ></app-lozenge>
+                  ${this.streamStatus === 'live'
+                    ? html`<app-lozenge class="lozenge-live">LIVE</app-lozenge>`
+                    : this.streamStatus === 'end'
+                    ? html`<app-lozenge class="lozenge-ended"
+                        >Live Ended</app-lozenge
+                      >`
+                    : undefined}
+                  ${this.streamStatus === 'live' || this.streamStatus === 'end'
+                    ? html`<app-lozenge
+                        ><app-timer-counter></app-timer-counter
+                      ></app-lozenge>`
+                    : undefined}
                 </div>
               `
             : html`
