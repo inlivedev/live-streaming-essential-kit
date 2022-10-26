@@ -24,7 +24,7 @@ const handler = async (request, reply) => {
 
   /**
    * @typedef Config
-   * @property {string} api_key - A string of key that will be used to access inLive protected API
+   * @property {string} apiKey - A string of key that will be used to access inLive protected API
    */
 
   /**
