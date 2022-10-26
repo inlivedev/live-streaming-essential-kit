@@ -34,7 +34,7 @@ const handler = async (request, reply) => {
    */
   let config = {
     // eslint-disable-next-line camelcase
-    api_key: process.env.API_KEY
+    apiKey: process.env.API_KEY
   };
 
   const inliveApp = InliveApp.init(config);
