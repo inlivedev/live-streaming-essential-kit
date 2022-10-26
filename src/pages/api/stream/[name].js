@@ -24,7 +24,7 @@ const handler = async (request, reply) => {
 
   /**
    * @typedef Config
-   * @property {string} api_key - A string of key that will be used to access inLive protected API
+   * @property {string} apiKey - A string of key that will be used to access inLive protected API
    */
 
   /**
@@ -34,7 +34,7 @@ const handler = async (request, reply) => {
    */
   let config = {
     // eslint-disable-next-line camelcase
-    api_key: process.env.API_KEY
+    apiKey: process.env.API_KEY
   };
 
   const inliveApp = InliveApp.init(config);
