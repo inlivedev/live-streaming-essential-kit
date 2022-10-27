@@ -99,7 +99,8 @@ export class AppInformationPanel extends LitElement {
   static properties = {
     heading: { type: String },
     description: { type: String },
-    streamStatus: { type: String }
+    streamStatus: { type: String },
+    streamId: { type: Number }
   };
 
   constructor() {
@@ -110,6 +111,8 @@ export class AppInformationPanel extends LitElement {
     this.description = '';
     /** @type {StreamStatusType} */
     this.streamStatus = 'preparing';
+    /** @type {number | undefined} */
+    this.streamId = undefined;
   }
 
   render() {
@@ -149,7 +152,7 @@ export class AppInformationPanel extends LitElement {
                   Connecting...
                 </app-lozenge>
               `}
-          <app-viewer-count></app-viewer-count>
+          <app-viewer-count streamId=${this.streamId}></app-viewer-count>
         </div>
       </div>
     `;

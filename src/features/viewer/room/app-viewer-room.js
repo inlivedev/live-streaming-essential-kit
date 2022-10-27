@@ -97,7 +97,8 @@ export class AppViewerRoom extends LitElement {
     hlsManifest: { type: String },
     dashManifest: { type: String },
     startTime: { type: String },
-    endTime: { type: String }
+    endTime: { type: String },
+    streamId: { type: Number }
   };
 
   constructor() {
@@ -116,6 +117,8 @@ export class AppViewerRoom extends LitElement {
     this.endTime = '';
     /** @type {StreamStatusType} */
     this.streamStatus = 'upcoming';
+    /** @type {number | undefined} */
+    this.streamId = undefined;
   }
 
   connectedCallback() {
@@ -141,6 +144,7 @@ export class AppViewerRoom extends LitElement {
             heading=${this.heading}
             description=${this.description}
             streamStatus=${this.streamStatus}
+            streamId=${this.streamId}
           ></app-information-panel>
         </div>
         <div class="activity-panel">
