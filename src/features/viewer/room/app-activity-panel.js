@@ -154,7 +154,7 @@ class AppActivityPanel extends LitElement {
       }
 
       .button-submit {
-        right: 5.5rem;
+        right: 1.5rem;
       }
     }
   `;
