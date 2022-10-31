@@ -58,56 +58,13 @@ class AppViewerCount extends LitElement {
   `;
 
   static properties = {
-    viewerCount: { type: Number },
-    streamId: { type: Number }
+    viewerCount: { type: Number }
   };
 
   constructor() {
     super();
     /** @type {number} */
     this.viewerCount = 0;
-    /** @type {number | undefined} */
-    this.streamId = undefined;
-  }
-
-  connectedCallback() {
-    super.connectedCallback();
-
-    const baseUrl = 'https://channel.inlive.app';
-    const subscribeUrl = `${baseUrl}/subscribe/${this.streamId}`;
-    const eventSource = new EventSource(subscribeUrl);
-
-    eventSource.addEventListener('message', (event) => {
-      if (event?.data) {
-        const data = JSON.parse(event.data);
-        const messageData = data.message;
-        console.log('data', data);
-
-        if (messageData) {
-          if (data.type === 'init' && messageData.viewer_count) {
-            this.updateViewerCounterUI(messageData.viewer_count);
-          } else if (data.type === 'system' && messageData.viewer_count) {
-            this.updateViewerCounterUI(messageData.viewer_count);
-          }
-        }
-      }
-    });
-
-    eventSource.addEventListener('error', (event) => {
-      if (eventSource.readyState === EventSource.CLOSED) {
-        console.log('Connection was closed');
-      }
-      console.log(event);
-    });
-  }
-
-  /**
-   * @param {number} counter viewer quantity
-   */
-  updateViewerCounterUI(counter) {
-    if (typeof counter === 'number') {
-      this.viewerCount = counter;
-    }
   }
 
   render() {

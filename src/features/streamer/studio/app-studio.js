@@ -4,6 +4,7 @@ import './app-action-panel.js';
 import './app-video-panel.js';
 import './app-information-panel.js';
 import '../../shared/ui/app-activity-panel.js';
+import { fetchHttp } from '../../shared/modules/fetch-http.js';
 
 /**
  * @typedef {'preparing' | 'connecting' | 'ready' | 'live' | 'end'} StreamStatusType
@@ -134,7 +135,10 @@ export class AppStudio extends LitElement {
     endTime: { type: String },
     preparedAt: { type: String },
     quality: { type: Number },
-    streamStatus: { type: String }
+    streamStatus: { type: String },
+    token: { type: String },
+    templates: { type: Array },
+    viewerCount: { type: Number }
   };
 
   constructor() {
@@ -155,6 +159,12 @@ export class AppStudio extends LitElement {
     this.quality = undefined;
     /** @type {StreamStatusType} */
     this.streamStatus = 'preparing';
+    /** @type {string} */
+    this.token = '';
+    /** @type {any} */
+    this.templates = [];
+    /** @type {number} */
+    this.viewerCount = 0;
   }
 
   connectedCallback() {
@@ -175,6 +185,167 @@ export class AppStudio extends LitElement {
         this.streamStatus = 'end';
       });
     }
+
+    const baseUrl = 'https://channel.inlive.app';
+    const subscribeUrl = `${baseUrl}/subscribe/${this.streamId}`;
+    const eventSource = new EventSource(subscribeUrl);
+
+    eventSource.addEventListener('message', (event) => {
+      if (event?.data) {
+        const data = JSON.parse(event.data);
+        const messageData = data.message;
+        console.log('event source data', data);
+
+        if (data.type === 'init') {
+          console.log('---msk init condition---');
+          this.token = messageData?.token;
+          console.log('token', this.token);
+          this.getAllMessages();
+
+          if (messageData.viewer_count) {
+            this.updateViewerCounterUI(messageData.viewer_count);
+          }
+        } else if (messageData) {
+          if (Array.isArray(messageData)) {
+            console.log('---msk message data array condition---');
+            console.log('messageData', messageData);
+            const filteredMessages = messageData.filter((messageItem) => {
+              const { message } = messageItem;
+              return message && message.type === 'chat';
+            });
+
+            console.log('filtered message', filteredMessages);
+            for (const filteredItem of filteredMessages) {
+              const { message } = filteredItem;
+
+              if (message) {
+                const { username, messageText } = message;
+                const chatMessage = this.createChatMessage(
+                  username,
+                  messageText
+                );
+
+                if (chatMessage) {
+                  console.log('msk siniiiiii--chatmessage');
+                  this.templates = [...this.templates, chatMessage];
+                }
+              }
+            }
+          } else if (
+            data.type === 'system' &&
+            (data.message.status === 'join' || data.message.status === 'leave')
+          ) {
+            console.log('---msk system join leave---');
+            const username = localStorage.getItem('viewer-username');
+            const templateToAppend = html`
+              <li class="activity-log">
+                <p class="activity-log-message">
+                  ${username} ${data.message.status}
+                </p>
+              </li>
+            `;
+
+            this.templates = [...this.templates, templateToAppend];
+
+            if (messageData.viewer_count) {
+              this.updateViewerCounterUI(messageData.viewer_count);
+            }
+          } else {
+            const { username, messageText } = messageData;
+            const chatMessage = this.createChatMessage(username, messageText);
+            console.log('chat message', chatMessage);
+
+            if (chatMessage) {
+              this.templates = [...this.templates, chatMessage];
+            }
+          }
+
+          const bodyElement = this.renderRoot.querySelector(
+            'app-activity-panel .activity-panel-list'
+          );
+          console.log('body el', bodyElement);
+          if (bodyElement) {
+            console.log('---msk sini body el---');
+            this.scrollToBottom(bodyElement);
+          }
+        }
+      }
+    });
+
+    eventSource.addEventListener('error', (event) => {
+      if (eventSource.readyState === EventSource.CLOSED) {
+        console.log('Connection was closed');
+      }
+      console.log(event);
+    });
+  }
+
+  /**
+   * @param {string} username username
+   * @param {string} messageText chat text
+   * @returns {any} html
+   */
+  createChatMessage(username, messageText) {
+    if (username && messageText) {
+      const templateToAppend = html`
+        <li class="activity-chat">
+          <div class="activity-chat-wrapper">
+            <strong class="activity-chat-name">${username}:</strong>
+            <p class="activity-chat-message">${messageText}</p>
+          </div>
+        </li>
+      `;
+      return templateToAppend;
+    }
+  }
+
+  async getAllMessages() {
+    const getAllMessageBody = {
+      type: 'request',
+      // widget key prop needs to be snake case as example
+      widgetKey: ''
+    };
+
+    const baseUrl = 'https://channel.inlive.app';
+    const getAllMessageURL = `${baseUrl}/publish/${this.streamId}?token=${this.token}`;
+    const data = await fetchHttp({
+      url: getAllMessageURL,
+      method: 'POST',
+      body: getAllMessageBody
+    });
+
+    console.log('fecth all message', data);
+
+    if (data.code !== 200) {
+      alert(data.message);
+    }
+  }
+
+  /**
+   * @param {{ scrollTop: any; clientHeight: any; scrollHeight: any; }} element element
+   */
+  scrollToBottom(element) {
+    if (element) {
+      const autoScroll =
+        element.scrollTop + element.clientHeight !== element.scrollHeight;
+
+      console.log('1', element.scrollTop);
+      console.log('2', element.clientHeight);
+      console.log('3', element.scrollHeight);
+      console.log('autoScroll', autoScroll);
+      if (autoScroll) {
+        element.scrollTop = element.scrollHeight;
+      }
+    }
+  }
+
+  /**
+   * @param {number} counter viewer quantity
+   */
+  updateViewerCounterUI(counter) {
+    if (typeof counter === 'number') {
+      this.viewerCount = counter;
+    }
   }
 
   render() {
@@ -194,7 +365,7 @@ export class AppStudio extends LitElement {
             heading=${this.heading}
             description=${this.description}
             streamStatus=${this.streamStatus}
-            streamId=${this.streamId}
+            viewerCount=${this.viewerCount}
           ></app-information-panel>
         </div>
         <div class="action-panel">
@@ -208,6 +379,8 @@ export class AppStudio extends LitElement {
         <div class="activity-panel">
           <div class="activity-panel-container">
             <app-activity-panel
+              token=${this.token}
+              .templates=${this.templates}
               streamId=${this.streamId}
               chatForm="noForm"
             ></app-activity-panel>

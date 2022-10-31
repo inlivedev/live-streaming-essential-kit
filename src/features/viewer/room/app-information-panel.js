@@ -96,7 +96,7 @@ export class AppInformationPanel extends LitElement {
     heading: { type: String },
     description: { type: String },
     streamStatus: { type: String },
-    streamId: { type: Number }
+    viewerCount: { type: Number }
   };
 
   constructor() {
@@ -107,8 +107,8 @@ export class AppInformationPanel extends LitElement {
     this.description = '';
     /** @type {StreamStatusType} */
     this.streamStatus = 'upcoming';
-    /** @type {number | undefined} */
-    this.streamId = undefined;
+    /** @type {number} */
+    this.viewerCount = 0;
   }
 
   render() {
@@ -136,8 +136,7 @@ export class AppInformationPanel extends LitElement {
             : html`
                 <app-lozenge class="lozenge-upcoming">Upcoming</app-lozenge>
               `}
-          <!-- <app-viewer-count streamId=${this
-            .streamId}></app-viewer-count> -->
+          <app-viewer-count viewerCount=${this.viewerCount}></app-viewer-count>
         </div>
       </div>
     `;
