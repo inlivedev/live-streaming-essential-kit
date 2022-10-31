@@ -207,7 +207,7 @@ export class AppStudio extends LitElement {
         </div>
         <div class="activity-panel">
           <div class="activity-panel-container">
-            <app-activity-panel></app-activity-panel>
+            <app-activity-panel streamId=${this.streamId}></app-activity-panel>
           </div>
         </div>
       </div>

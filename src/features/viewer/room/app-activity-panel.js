@@ -9,9 +9,10 @@ class AppActivityPanel extends LitElement {
     }
     :host {
       width: 100%;
-      height: 100%;
+      height: 14rem;
       display: flex;
       flex-direction: column;
+      overflow-y: auto;
     }
 
     .activity-panel-heading {
@@ -29,6 +30,8 @@ class AppActivityPanel extends LitElement {
     .activity-panel-body {
       flex: 1;
       background-color: transparent;
+      position: absolute;
+      bottom: 4rem;
     }
 
     .activity-panel-list {
@@ -113,10 +116,15 @@ class AppActivityPanel extends LitElement {
     @media (min-width: 1024px) {
       :host {
         background-color: #f9fafb;
+        height: 100%;
       }
 
       .activity-panel-heading {
         display: block;
+      }
+
+      .activity-panel-body {
+        position: static;
       }
 
       .activity-log {
@@ -161,7 +169,8 @@ class AppActivityPanel extends LitElement {
 
   static properties = {
     token: { type: String },
-    templates: { type: Array }
+    templates: { type: Array },
+    streamId: { type: Number }
   };
 
   constructor() {
@@ -171,14 +180,15 @@ class AppActivityPanel extends LitElement {
      * @type {any}
      */
     this.templates = [];
+    /** @type {number | undefined} */
+    this.streamId = undefined;
   }
 
   connectedCallback() {
     super.connectedCallback();
 
-    const streamId = 595;
     const baseUrl = 'https://channel.inlive.app';
-    const subscribeUrl = `${baseUrl}/subscribe/${streamId}`;
+    const subscribeUrl = `${baseUrl}/subscribe/${this.streamId}`;
     const eventSource = new EventSource(subscribeUrl);
 
     eventSource.addEventListener('message', (event) => {
@@ -218,6 +228,20 @@ class AppActivityPanel extends LitElement {
                 }
               }
             }
+          } else if (
+            data.type === 'system' &&
+            (data.message.status === 'join' || data.message.status === 'leave')
+          ) {
+            const username = localStorage.getItem('viewer-username');
+            const templateToAppend = html`
+              <li class="activity-log">
+                <p class="activity-log-message">
+                  ${username} ${data.message.status}
+                </p>
+              </li>
+            `;
+
+            this.templates = [...this.templates, templateToAppend];
           } else {
             const { username, messageText } = messageData;
             const chatMessage = this.createChatMessage(username, messageText);
@@ -261,11 +285,12 @@ class AppActivityPanel extends LitElement {
   async getAllMessages() {
     const getAllMessageBody = {
       type: 'request',
+      // widget key prop needs to be snake case as example
       widgetKey: ''
     };
-    const streamId = 595;
+
     const baseUrl = 'https://channel.inlive.app';
-    const getAllMessageURL = `${baseUrl}/publish/${streamId}?token=${this.token}`;
+    const getAllMessageURL = `${baseUrl}/publish/${this.streamId}?token=${this.token}`;
     const data = await fetchHttp({
       url: getAllMessageURL,
       method: 'POST',
@@ -285,7 +310,7 @@ class AppActivityPanel extends LitElement {
   async handleSubmitChat(event) {
     event.preventDefault();
     const form = event.target;
-    const username = 'user';
+    const username = localStorage.getItem('viewer-username');
     const message = form['message'].value;
 
     const sendMessageBody = {
@@ -294,13 +319,13 @@ class AppActivityPanel extends LitElement {
         type: 'chat',
         messageText: message
       },
+      // widget key prop needs to be snake case as example
       widgetKey: '',
       type: 'broadcast'
     };
 
-    const streamId = 595;
     const baseUrl = 'https://channel.inlive.app';
-    const sendMessageUrl = `${baseUrl}/publish/${streamId}?token=${this.token}`;
+    const sendMessageUrl = `${baseUrl}/publish/${this.streamId}?token=${this.token}`;
     const data = await fetchHttp({
       url: sendMessageUrl,
       method: 'POST',
@@ -320,30 +345,6 @@ class AppActivityPanel extends LitElement {
     return html`
       <div class="activity-panel-heading">Stream Activity</div>
       <div class="activity-panel-body">
-        <!-- <ul class="activity-panel-list">
-          <li class="activity-log">
-            <p class="activity-log-message">luffy joined</p>
-          </li>
-          <li class="activity-log">
-            <p class="activity-log-message">zoro joined</p>
-          </li>
-          <li class="activity-chat">
-            <div class="activity-chat-wrapper">
-              <strong class="activity-chat-name">luffy:</strong>
-              <p class="activity-chat-message">seru banget!!!</p>
-            </div>
-          </li>
-          <li class="activity-log">
-            <p class="activity-log-message">zoro joined</p>
-          </li>
-          <li class="activity-chat">
-            <div class="activity-chat-wrapper">
-              <strong class="activity-chat-name">luffy:</strong>
-              <p class="activity-chat-message">seru banget!!!</p>
-            </div>
-          </li>
-        </ul> -->
-
         <ul class="activity-panel-list">
           ${this.templates}
         </ul>
