@@ -3,7 +3,7 @@ import { InliveEvent } from '@inlivedev/inlive-js-sdk/event';
 import './app-action-panel.js';
 import './app-video-panel.js';
 import './app-information-panel.js';
-import './app-activity-panel.js';
+import '../../shared/ui/app-activity-panel.js';
 
 /**
  * @typedef {'preparing' | 'connecting' | 'ready' | 'live' | 'end'} StreamStatusType
@@ -207,7 +207,10 @@ export class AppStudio extends LitElement {
         </div>
         <div class="activity-panel">
           <div class="activity-panel-container">
-            <app-activity-panel streamId=${this.streamId}></app-activity-panel>
+            <app-activity-panel
+              streamId=${this.streamId}
+              chatForm="noForm"
+            ></app-activity-panel>
           </div>
         </div>
       </div>

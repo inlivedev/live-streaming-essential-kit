@@ -152,7 +152,8 @@ export class AppInformationPanel extends LitElement {
                   Connecting...
                 </app-lozenge>
               `}
-          <app-viewer-count streamId=${this.streamId}></app-viewer-count>
+          <!-- <app-viewer-count streamId=${this
+            .streamId}></app-viewer-count> -->
         </div>
       </div>
     `;

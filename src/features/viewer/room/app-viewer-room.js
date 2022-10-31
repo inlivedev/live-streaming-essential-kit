@@ -1,7 +1,7 @@
 import { css, html, LitElement } from 'lit';
 import './app-video-panel.js';
 import './app-information-panel.js';
-import './app-activity-panel.js';
+import '../../shared/ui/app-activity-panel.js';
 
 /**
  * @typedef {'upcoming' | 'live' | 'end'} StreamStatusType
@@ -149,7 +149,10 @@ export class AppViewerRoom extends LitElement {
         </div>
         <div class="activity-panel">
           <div class="activity-panel-container">
-            <app-activity-panel streamId=${this.streamId}></app-activity-panel>
+            <app-activity-panel
+              streamId=${this.streamId}
+              chatForm="hasForm"
+            ></app-activity-panel>
           </div>
         </div>
       </div>
