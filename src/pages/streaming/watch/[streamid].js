@@ -2,8 +2,15 @@ import { html } from 'lit';
 import { InliveStream } from '@inlivedev/inlive-js-sdk/stream';
 
 const WatchStreamingPage = (properties) => {
-  const { heading, description, hlsManifest, dashManifest, streamId } =
-    properties;
+  const {
+    heading,
+    description,
+    hlsManifest,
+    dashManifest,
+    streamId,
+    startTime,
+    endTime
+  } = properties;
 
   return html`
     <app-viewer-room
@@ -12,6 +19,8 @@ const WatchStreamingPage = (properties) => {
       hlsManifest=${hlsManifest}
       dashManifest=${dashManifest}
       streamId=${streamId}
+      startTime=${startTime}
+      endTime=${endTime}
     >
     </app-viewer-room>
   `;
