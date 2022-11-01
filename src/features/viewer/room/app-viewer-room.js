@@ -213,15 +213,14 @@ export class AppViewerRoom extends LitElement {
               this.templates = [...this.templates, chatMessage];
             }
           }
-
-          const bodyElement = this.renderRoot.querySelector(
-            'app-activity-panel .activity-panel-list'
-          );
-          console.log('body el', bodyElement);
-          if (bodyElement) {
-            console.log('---msk sini body el---');
-            this.scrollToBottom(bodyElement);
-          }
+        }
+        const bodyElement = this.renderRoot
+          .querySelector('app-activity-panel')
+          ?.shadowRoot?.querySelector('.activity-panel-list');
+        console.log('body el', bodyElement);
+        if (bodyElement) {
+          console.log('---msk sini body el---');
+          this.scrollToBottom(bodyElement);
         }
       }
     });

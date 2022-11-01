@@ -36,7 +36,7 @@ class AppActivityPanel extends LitElement {
       display: flex;
       flex-direction: column;
       list-style: none;
-      padding: 0.5rem 0;
+      padding: 0.5rem 0 2rem 0;
       overflow-y: auto;
       height: 14rem;
     }

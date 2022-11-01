@@ -236,7 +236,8 @@ export class AppStudio extends LitElement {
             (data.message.status === 'join' || data.message.status === 'leave')
           ) {
             console.log('---msk system join leave---');
-            const username = localStorage.getItem('viewer-username');
+            // username for steamer to detect viewer still hardcode
+            const username = 'a user';
             const templateToAppend = html`
               <li class="activity-log">
                 <p class="activity-log-message">
@@ -260,9 +261,9 @@ export class AppStudio extends LitElement {
             }
           }
 
-          const bodyElement = this.renderRoot.querySelector(
-            'app-activity-panel .activity-panel-list'
-          );
+          const bodyElement = this.renderRoot
+            .querySelector('app-activity-panel')
+            ?.shadowRoot?.querySelector('.activity-panel-list');
           console.log('body el', bodyElement);
           if (bodyElement) {
             console.log('---msk sini body el---');
