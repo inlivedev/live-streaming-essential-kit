@@ -212,8 +212,6 @@ class AppActivityPanel extends LitElement {
       body: sendMessageBody
     });
 
-    console.log('submit hsl', data);
-
     if (data.code !== 200) {
       alert(data.message);
     } else {

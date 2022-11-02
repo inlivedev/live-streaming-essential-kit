@@ -147,12 +147,9 @@ export class AppViewerRoom extends LitElement {
       if (event?.data) {
         const data = JSON.parse(event.data);
         const messageData = data.message;
-        console.log('event source data', data);
 
         if (data.type === 'init') {
-          console.log('---msk init condition---');
           this.token = messageData?.token;
-          console.log('token', this.token);
           this.getAllMessages();
 
           if (messageData.viewer_count) {
@@ -160,14 +157,11 @@ export class AppViewerRoom extends LitElement {
           }
         } else if (messageData) {
           if (Array.isArray(messageData)) {
-            console.log('---msk message data array condition---');
-            console.log('messageData', messageData);
             const filteredMessages = messageData.filter((messageItem) => {
               const { message } = messageItem;
               return message && message.type === 'chat';
             });
 
-            console.log('filtered message', filteredMessages);
             for (const filteredItem of filteredMessages) {
               const { message } = filteredItem;
 
@@ -179,7 +173,6 @@ export class AppViewerRoom extends LitElement {
                 );
 
                 if (chatMessage) {
-                  console.log('msk siniiiiii--chatmessage');
                   this.templates = [...this.templates, chatMessage];
                 }
               }
@@ -188,7 +181,6 @@ export class AppViewerRoom extends LitElement {
             data.type === 'system' &&
             (data.message.status === 'join' || data.message.status === 'leave')
           ) {
-            console.log('---msk system join leave---');
             const username = localStorage.getItem('viewer-username');
             const templateToAppend = html`
               <li class="activity-log">
@@ -201,13 +193,11 @@ export class AppViewerRoom extends LitElement {
             this.templates = [...this.templates, templateToAppend];
 
             if (messageData.viewer_count) {
-              console.log('---msk system viewerCount---');
               this.updateViewerCounterUI(messageData.viewer_count);
             }
           } else {
             const { username, messageText } = messageData;
             const chatMessage = this.createChatMessage(username, messageText);
-            console.log('chat message', chatMessage);
 
             if (chatMessage) {
               this.templates = [...this.templates, chatMessage];
@@ -217,9 +207,7 @@ export class AppViewerRoom extends LitElement {
         const bodyElement = this.renderRoot
           .querySelector('app-activity-panel')
           ?.shadowRoot?.querySelector('.activity-panel-list');
-        console.log('body el', bodyElement);
         if (bodyElement) {
-          console.log('---msk sini body el---');
           this.scrollToBottom(bodyElement);
         }
       }
@@ -267,8 +255,6 @@ export class AppViewerRoom extends LitElement {
       body: getAllMessageBody
     });
 
-    console.log('fecth all message', data);
-
     if (data.code !== 200) {
       alert(data.message);
     }
@@ -282,10 +268,6 @@ export class AppViewerRoom extends LitElement {
       const autoScroll =
         element.scrollTop + element.clientHeight !== element.scrollHeight;
 
-      console.log('1', element.scrollTop);
-      console.log('2', element.clientHeight);
-      console.log('3', element.scrollHeight);
-      console.log('autoScroll', autoScroll);
       if (autoScroll) {
         element.scrollTop = element.scrollHeight;
       }
