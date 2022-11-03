@@ -1,5 +1,6 @@
 import { html } from 'lit';
 import { InliveStream } from '@inlivedev/inlive-js-sdk/stream';
+import { initialization } from '../../../features/shared/modules/initialization.js';
 
 const PreviewLiveStream = (
   /** @type {{ streamTitle: string; streamDescription: string; startTime: string; streamId: string; streamStatus: string; }} */ properties
@@ -27,8 +28,10 @@ export default PreviewLiveStream;
 export const getServerSideProps = async (
   /** @type {{ params: { streamid: string; }; }} */ request
 ) => {
+  const inliveApp = initialization();
+
   const streamId = Number.parseInt(request.params.streamid, 10);
-  const streamResponse = await InliveStream.getStream(streamId);
+  const streamResponse = await InliveStream.getStream(inliveApp, streamId);
 
   let streamData = {};
 

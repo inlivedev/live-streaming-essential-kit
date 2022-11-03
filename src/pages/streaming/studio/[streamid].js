@@ -1,6 +1,7 @@
 import { html } from 'lit';
 import { InliveStream } from '@inlivedev/inlive-js-sdk/stream';
 import { validation } from '../../../features/auth/validation.js';
+import { initialization } from '../../../features/shared/modules/initialization.js';
 
 const StudioStreamingPage = (properties) => {
   const {
@@ -44,7 +45,9 @@ export const getServerSideProps = async (request, reply) => {
     });
   }
 
-  const streamResponse = await InliveStream.getStream(streamId);
+  const inliveApp = initialization();
+
+  const streamResponse = await InliveStream.getStream(inliveApp, streamId);
   let streamData = {};
 
   if (streamResponse.status.code === 200 && streamResponse.data) {

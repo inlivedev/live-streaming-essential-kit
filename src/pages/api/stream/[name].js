@@ -1,6 +1,6 @@
-import { InliveApp } from '@inlivedev/inlive-js-sdk/app';
 import { InliveStream } from '@inlivedev/inlive-js-sdk/stream';
 import { validation } from '../../../features/auth/validation.js';
+import { initialization } from '../../../features/shared/modules/initialization.js';
 
 const handler = async (request, reply) => {
   const name = request.params?.name;
@@ -22,22 +22,7 @@ const handler = async (request, reply) => {
       message: 'You are not authorized'
     });
 
-  /**
-   * @typedef Config
-   * @property {string} apiKey - A string of key that will be used to access inLive protected API
-   */
-
-  /**
-   * A variable to create object
-   *
-   * @param {Config} config - The initialization configuration
-   */
-  let config = {
-    // eslint-disable-next-line camelcase
-    apiKey: process.env.API_KEY
-  };
-
-  const inliveApp = InliveApp.init(config);
+  const inliveApp = initialization();
 
   switch (name) {
     case 'create': {
