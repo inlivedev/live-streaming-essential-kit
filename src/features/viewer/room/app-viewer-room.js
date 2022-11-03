@@ -97,7 +97,8 @@ export class AppViewerRoom extends LitElement {
     hlsManifest: { type: String },
     dashManifest: { type: String },
     startTime: { type: String },
-    endTime: { type: String }
+    endTime: { type: String },
+    streamStatus: { type: String }
   };
 
   constructor() {
@@ -141,6 +142,8 @@ export class AppViewerRoom extends LitElement {
             heading=${this.heading}
             description=${this.description}
             streamStatus=${this.streamStatus}
+            startTime=${this.startTime}
+            endTime=${this.endTime}
           ></app-information-panel>
         </div>
         <div class="activity-panel">

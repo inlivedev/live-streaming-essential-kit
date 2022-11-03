@@ -1,6 +1,8 @@
 import { html, LitElement, css } from 'lit';
 import '../../shared/ui/app-viewer-count.js';
 import '../../shared/ui/app-lozenge.js';
+import '../../shared/ui/app-timer-counter.js';
+import { handleTimer } from '../../shared/modules/handle-timer.js';
 
 /**
  * @typedef {import('./app-studio.js').StreamStatusType} StreamStatusType
@@ -99,7 +101,9 @@ export class AppInformationPanel extends LitElement {
   static properties = {
     heading: { type: String },
     description: { type: String },
-    streamStatus: { type: String }
+    streamStatus: { type: String },
+    endTime: { type: String },
+    startTime: { type: String }
   };
 
   constructor() {
@@ -110,6 +114,27 @@ export class AppInformationPanel extends LitElement {
     this.description = '';
     /** @type {StreamStatusType} */
     this.streamStatus = 'preparing';
+    /** @type {string | undefined} */
+    this.endTime = undefined;
+    /** @type {string | undefined} */
+    this.startTime = undefined;
+  }
+
+  /**
+   * @param {{ has: (arg0: string) => any; }} changedProperties changed properties name
+   */
+  updated(changedProperties) {
+    //check for the streamState changes
+    if (changedProperties.has('streamStatus')) {
+      const appTimerCounter =
+        this.renderRoot.querySelector('app-timer-counter');
+      handleTimer(
+        appTimerCounter,
+        this.streamStatus,
+        this.startTime,
+        this.endTime
+      );
+    }
   }
 
   render() {
@@ -130,18 +155,21 @@ export class AppInformationPanel extends LitElement {
             ? html`
                 <app-lozenge class="lozenge-ready">Ready to Live</app-lozenge>
               `
-            : this.streamStatus === 'live'
+            : this.streamStatus === 'live' || this.streamStatus === 'end'
             ? html`
                 <div class="lozenge-wrapper">
-                  <app-lozenge class="lozenge-live">LIVE</app-lozenge>
-                  <app-lozenge>00:00:00</app-lozenge>
-                </div>
-              `
-            : this.streamStatus === 'end'
-            ? html`
-                <div class="lozenge-wrapper">
-                  <app-lozenge class="lozenge-ended">Live Ended</app-lozenge>
-                  <app-lozenge>00:30:00</app-lozenge>
+                  ${this.streamStatus === 'live'
+                    ? html`<app-lozenge class="lozenge-live">LIVE</app-lozenge>`
+                    : this.streamStatus === 'end'
+                    ? html`<app-lozenge class="lozenge-ended"
+                        >Live Ended</app-lozenge
+                      >`
+                    : undefined}
+                  ${this.streamStatus === 'live' || this.streamStatus === 'end'
+                    ? html`<app-lozenge
+                        ><app-timer-counter></app-timer-counter
+                      ></app-lozenge>`
+                    : undefined}
                 </div>
               `
             : html`

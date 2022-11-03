@@ -194,6 +194,8 @@ export class AppStudio extends LitElement {
             heading=${this.heading}
             description=${this.description}
             streamStatus=${this.streamStatus}
+            startTime=${this.startTime}
+            endTime=${this.endTime}
           ></app-information-panel>
         </div>
         <div class="action-panel">
