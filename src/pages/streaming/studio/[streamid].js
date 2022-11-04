@@ -46,8 +46,6 @@ export const getServerSideProps = async (request, reply) => {
   }
 
   const inliveApp = initialization();
-
-  console.log('cek', typeof streamId);
   const streamResponse = await InliveStream.getStream(inliveApp, streamId);
   let streamData = {};
 
