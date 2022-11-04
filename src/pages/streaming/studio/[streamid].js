@@ -1,5 +1,5 @@
 import { html } from 'lit';
-import { InliveStream } from '@inlivedev/inlive-js-sdk/stream';
+import { InliveStream } from '@inlivedev/inlive-js-sdk';
 import { validation } from '../../../features/auth/validation.js';
 import { initialization } from '../../../features/shared/modules/initialization.js';
 
@@ -47,6 +47,7 @@ export const getServerSideProps = async (request, reply) => {
 
   const inliveApp = initialization();
 
+  console.log('cek', typeof streamId);
   const streamResponse = await InliveStream.getStream(inliveApp, streamId);
   let streamData = {};
 

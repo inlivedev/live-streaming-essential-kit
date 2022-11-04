@@ -1,5 +1,5 @@
 import { html, css, LitElement } from 'lit';
-import { InliveEvent } from '@inlivedev/inlive-js-sdk/event';
+import { InliveEvent } from '@inlivedev/inlive-js-sdk';
 import './app-action-panel.js';
 import './app-video-panel.js';
 import './app-information-panel.js';

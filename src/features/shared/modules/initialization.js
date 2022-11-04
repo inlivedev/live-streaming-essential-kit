@@ -1,4 +1,4 @@
-import { InliveApp } from '@inlivedev/inlive-js-sdk-dev/app';
+import { InliveApp } from '@inlivedev/inlive-js-sdk';
 
 export const initialization = () => {
   /**

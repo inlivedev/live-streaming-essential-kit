@@ -1,4 +1,4 @@
-import { InliveStream } from '@inlivedev/inlive-js-sdk/stream';
+import { InliveStream } from '@inlivedev/inlive-js-sdk';
 import { validation } from '../../../features/auth/validation.js';
 import { initialization } from '../../../features/shared/modules/initialization.js';
 

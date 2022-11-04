@@ -1,6 +1,6 @@
 import { LitElement } from 'lit';
-import { InliveStream } from '@inlivedev/inlive-js-sdk/stream';
-import { InliveEvent } from '@inlivedev/inlive-js-sdk/event';
+import { InliveStream } from '@inlivedev/inlive-js-sdk';
+import { InliveEvent } from '@inlivedev/inlive-js-sdk';
 import { fetchHttp } from '../../shared/modules/fetch-http.js';
 
 /**
