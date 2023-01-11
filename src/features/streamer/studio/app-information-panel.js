@@ -1,5 +1,4 @@
 import { html, LitElement, css } from 'lit';
-import '../../shared/ui/app-viewer-count.js';
 import '../../shared/ui/app-lozenge.js';
 import '../../shared/ui/app-timer-counter.js';
 import { handleTimer } from '../../shared/modules/handle-timer.js';
@@ -177,7 +176,6 @@ export class AppInformationPanel extends LitElement {
                   Connecting...
                 </app-lozenge>
               `}
-          <app-viewer-count></app-viewer-count>
         </div>
       </div>
     `;

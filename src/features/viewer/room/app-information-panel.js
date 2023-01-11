@@ -1,12 +1,7 @@
 import { html, LitElement, css } from 'lit';
-import '../../shared/ui/app-viewer-count.js';
 import '../../shared/ui/app-lozenge.js';
 import '../../shared/ui/app-timer-counter.js';
 import { handleTimer } from '../../shared/modules/handle-timer.js';
-
-/**
- * @typedef {import('./app-viewer-room.js').StreamStatusType} StreamStatusType
- */
 
 /**
  * @typedef {import('./app-viewer-room.js').StreamStatusType} StreamStatusType
@@ -166,7 +161,6 @@ export class AppInformationPanel extends LitElement {
             : html`
                 <app-lozenge class="lozenge-upcoming">Upcoming</app-lozenge>
               `}
-          <app-viewer-count></app-viewer-count>
         </div>
       </div>
     `;
